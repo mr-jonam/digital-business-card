@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-10-23T13:03:37Z",
+  "encryption": {
+    "algorithm": null,
+    "identity_envelope": null,
+    "identity_envelope_sha256": null,
+    "recipient_sha256": null
+  },
+  "license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+  "owner_ref": "mr-jonam",
+  "project_id": "e84f6996-25df-4e42-bcbf-adaca8fd7611",
+  "project_token": "RPTZX3LeE8HI9ehXkrUUtlQWBkc9OLdtgzCAmL47fug",
+  "rights_profile": "open-source",
+  "schema": "codex.project-provenance.v1",
+  "signing": {
+    "algorithm": null,
+    "namespace": null,
+    "public_key": null,
+    "public_key_sha256": null
+  },
+  "tracked_file_count": 14,
+  "tracked_tree_sha256": "d5c0211e7ac9653f368b0014fc68a780c0663b120ca6c7fe846edff55b0dd11d"
+}

@@ -1,0 +1,177 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1280" viewBox="0 0 1920 1280" role="img" aria-labelledby="title desc">
+  <title id="title">Digital Business Card — direzione visiva</title>
+  <desc id="desc">Tre mockup statici: scheda pubblica mobile, editor desktop e condivisione QR. Tutti i dati sono dimostrativi. L'area QR è un segnaposto non scansionabile.</desc>
+  <defs>
+    <pattern id="grid" width="18" height="18" patternUnits="userSpaceOnUse"><path d="M18 0H0V18" fill="none" stroke="#DCE6E0" stroke-width="0.6"/></pattern>
+    <filter id="shadow" x="-15%" y="-12%" width="130%" height="135%"><feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#203B2E" flood-opacity="0.08"/></filter>
+    <style>
+      text { font-family: 'Segoe UI', Arial, sans-serif; fill: #182B27; }
+      .muted { fill: #52645E; }
+      .accent { fill: #17614D; }
+      .white { fill: #FFFFFF; }
+      .mono { font-family: Consolas, monospace; }
+      .label { font-size: 13px; font-weight: 600; letter-spacing: 1.6px; }
+      .body { font-size: 15px; }
+      .small { font-size: 12px; }
+      .rule { stroke: #D5DFDA; stroke-width: 1; }
+      .input { fill: #FFFFFF; stroke: #D5DFDA; stroke-width: 1; }
+    </style>
+  </defs>
+  <rect width="1920" height="1280" fill="#EEF3F0"/>
+  <path d="M72 66H114" stroke="#17614D" stroke-width="4"/>
+  <text x="130" y="71" class="label accent">DIGITAL BUSINESS CARD / DESIGN BLUEPRINT</text>
+  <text x="72" y="130" font-size="42" font-weight="600" letter-spacing="-1.2">Il biglietto segue la conversazione.</text>
+  <text x="72" y="165" font-size="17" class="muted">Una scheda sul tuo dominio. Il contatto sul telefono di chi incontri.</text>
+  <text x="1848" y="72" text-anchor="end" class="mono small muted">23.10.2026 / CONCEPT 01</text>
+  <path d="M72 194H1848" class="rule"/>
+
+  <text x="72" y="237" class="label accent">01 / PRESENTATI</text>
+  <text x="486" y="237" class="label accent">02 / GESTISCI E PUBBLICA</text>
+  <text x="1488" y="237" class="label accent">03 / CONDIVIDI</text>
+
+  <!-- Public mobile screen. -->
+  <rect x="72" y="264" width="366" height="830" rx="28" fill="#FFFFFF" filter="url(#shadow)"/>
+  <rect x="72" y="264" width="366" height="830" rx="28" fill="none" stroke="#D5DFDA"/>
+  <rect x="92" y="283" width="326" height="34" rx="17" fill="#F3F6F4"/>
+  <rect x="107" y="295" width="7" height="7" rx="2" fill="#17614D"/>
+  <text x="125" y="305" class="small muted">cards.example.org/c/demo</text>
+  <path d="M100 349h20m-20 6h13m-13 6h20" stroke="#17614D" stroke-width="2"/>
+  <text x="131" y="359" font-size="13" font-weight="600">Organizzazione demo</text>
+  <circle cx="137" cy="432" r="37" fill="#E4EEE8"/>
+  <path d="M114 450l18-39 24 39" fill="none" stroke="#17614D" stroke-width="1.5"/>
+  <text x="188" y="426" class="small accent" font-weight="600">IL TUO CONTATTO</text>
+  <text x="188" y="447" class="small muted">Biglietto generale</text>
+  <text x="100" y="512" font-size="32" font-weight="600" letter-spacing="-0.6">Profilo</text>
+  <text x="100" y="550" font-size="32" font-weight="600" letter-spacing="-0.6">dimostrativo</text>
+  <text x="100" y="584" font-size="16" class="muted">Ruolo professionale</text>
+  <text x="100" y="618" font-size="15" class="muted">Progetti, idee e contatti.</text>
+  <rect x="100" y="651" width="310" height="54" rx="12" fill="#17614D"/>
+  <path d="M122 671v13h12m-8-20v13m-4-4 4 4 4-4" fill="none" stroke="#FFFFFF" stroke-width="1.7"/>
+  <text x="263" y="685" text-anchor="middle" font-size="16" font-weight="600" class="white">Salva contatto</text>
+  <rect x="100" y="717" width="149" height="45" rx="10" class="input"/>
+  <rect x="261" y="717" width="149" height="45" rx="10" class="input"/>
+  <text x="174" y="745" text-anchor="middle" class="body">Email</text>
+  <text x="335" y="745" text-anchor="middle" class="body">Condividi</text>
+  <text x="100" y="802" class="small muted" font-weight="600" letter-spacing="1">DOVE TROVARCI</text>
+  <text x="100" y="839" class="body" font-weight="600">Il nostro sito</text>
+  <text x="100" y="860" class="small muted">example.org</text>
+  <path d="M390 835h10v10m-1-9-12 12" fill="none" stroke="#17614D" stroke-width="1.5"/>
+  <path d="M100 877H410" class="rule"/>
+  <text x="100" y="905" class="body" font-weight="600">Progetti e servizi</text>
+  <text x="100" y="926" class="small muted">example.org/progetti</text>
+  <path d="M390 901h10v10m-1-9-12 12" fill="none" stroke="#17614D" stroke-width="1.5"/>
+  <path d="M100 943H410" class="rule"/>
+  <text x="100" y="971" class="body" font-weight="600">LinkedIn</text>
+  <text x="100" y="992" class="small muted">Profilo professionale</text>
+  <path d="M390 967h10v10m-1-9-12 12" fill="none" stroke="#17614D" stroke-width="1.5"/>
+  <path d="M100 1013H410" class="rule"/>
+  <text x="100" y="1046" class="small muted">Informativa privacy</text>
+  <text x="410" y="1046" text-anchor="end" class="small muted">Nessuna app richiesta</text>
+  <path d="M210 1075h90" stroke="#D5DFDA" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Desktop editor, intentionally wider than adjacent screens. -->
+  <rect x="486" y="264" width="954" height="698" rx="20" fill="#FFFFFF" filter="url(#shadow)"/>
+  <rect x="486" y="264" width="954" height="698" rx="20" fill="none" stroke="#D5DFDA"/>
+  <path d="M486 320H1440" class="rule"/>
+  <circle cx="510" cy="292" r="4" fill="#BCCDC4"/><circle cx="524" cy="292" r="4" fill="#BCCDC4"/><circle cx="538" cy="292" r="4" fill="#BCCDC4"/>
+  <text x="963" y="298" text-anchor="middle" class="small muted">Gestione / Profili / Profilo dimostrativo</text>
+  <path d="M670 320V962" class="rule"/>
+  <rect x="504" y="345" width="34" height="34" rx="9" fill="#17614D"/>
+  <path d="M514 356h15m-15 6h9m-9 6h15" stroke="#FFFFFF" stroke-width="2"/>
+  <text x="550" y="366" class="body" font-weight="600">Gestione</text>
+  <text x="508" y="415" class="small muted" letter-spacing="1">ORGANIZZAZIONE</text>
+  <rect x="500" y="435" width="156" height="42" rx="8" fill="#E9F1ED"/>
+  <text x="518" y="461" class="body accent" font-weight="600">Profili</text>
+  <text x="518" y="506" class="body muted">Marchio</text>
+  <text x="518" y="550" class="body muted">Utenti</text>
+  <text x="508" y="908" class="small muted">Installazione privata</text>
+  <text x="508" y="929" class="small accent">cards.example.org</text>
+  <text x="700" y="361" class="small muted">PROFILI / GENERALE</text>
+  <text x="700" y="398" font-size="26" font-weight="600" letter-spacing="-0.5">Modifica profilo</text>
+  <rect x="1309" y="343" width="101" height="29" rx="14" fill="#EDF3EF"/>
+  <circle cx="1324" cy="357" r="3" fill="#17614D"/>
+  <text x="1334" y="361" font-size="11" class="accent">Bozza salvata</text>
+  <text x="700" y="428" class="small muted">Le modifiche saranno visibili dopo la pubblicazione.</text>
+  <path d="M700 454H1410" class="rule"/>
+  <text x="700" y="480" class="small accent" font-weight="600">Identità</text>
+  <text x="786" y="480" class="small muted">Recapiti</text>
+  <text x="873" y="480" class="small muted">Link</text>
+  <text x="930" y="480" class="small muted">Contesti</text>
+  <path d="M700 493h48" stroke="#17614D" stroke-width="2"/>
+  <text x="700" y="531" class="small" font-weight="600">Nome visualizzato</text>
+  <rect x="700" y="543" width="352" height="43" rx="8" class="input"/>
+  <text x="714" y="570" class="body">Profilo dimostrativo</text>
+  <text x="700" y="615" class="small" font-weight="600">Ruolo professionale</text>
+  <rect x="700" y="627" width="352" height="43" rx="8" class="input"/>
+  <text x="714" y="654" class="body">Ruolo professionale</text>
+  <text x="700" y="699" class="small" font-weight="600">Presentazione breve</text>
+  <rect x="700" y="711" width="352" height="74" rx="8" class="input"/>
+  <text x="714" y="738" class="body">Progetti, idee e contatti.</text>
+  <text x="700" y="806" class="small muted">Visibile nella scheda pubblica. Massimo 400 caratteri.</text>
+  <text x="1090" y="529" class="small muted" letter-spacing="1">ANTEPRIMA</text>
+  <rect x="1090" y="543" width="320" height="285" rx="16" fill="#F6F8F7" stroke="#D5DFDA"/>
+  <circle cx="1126" cy="581" r="17" fill="#DFEAE3"/>
+  <path d="M1117 590l8-18 11 18" fill="none" stroke="#17614D" stroke-width="1.2"/>
+  <text x="1154" y="585" class="small muted">Organizzazione demo</text>
+  <text x="1110" y="634" font-size="19" font-weight="600">Profilo dimostrativo</text>
+  <text x="1110" y="659" class="small muted">Ruolo professionale</text>
+  <text x="1110" y="687" class="small muted">Progetti, idee e contatti.</text>
+  <rect x="1110" y="710" width="280" height="40" rx="8" fill="#17614D"/>
+  <text x="1250" y="735" text-anchor="middle" font-size="13" class="white" font-weight="600">Salva contatto</text>
+  <text x="1110" y="783" class="small">Il nostro sito</text>
+  <text x="1390" y="783" text-anchor="end" class="small accent">↗</text>
+  <text x="1090" y="851" font-size="11" class="muted">Anteprima privata / non è la versione pubblica</text>
+  <path d="M670 880H1440" class="rule"/>
+  <text x="700" y="924" class="small muted">Modifiche non pubblicate</text>
+  <rect x="1074" y="897" width="139" height="43" rx="9" class="input"/>
+  <text x="1143" y="923" text-anchor="middle" font-size="13">Salva bozza</text>
+  <rect x="1227" y="897" width="183" height="43" rx="9" fill="#17614D"/>
+  <text x="1318" y="923" text-anchor="middle" font-size="13" font-weight="600" class="white">Pubblica biglietto</text>
+
+  <path d="M486 1005H540" stroke="#17614D" stroke-width="2"/>
+  <text x="556" y="1011" font-size="17" font-weight="600">Un solo profilo. Il contesto giusto.</text>
+  <text x="486" y="1045" class="body muted">Generale, evento o progetto: scegli quali link mostrare,</text>
+  <text x="486" y="1069" class="body muted">mantieni i recapiti coerenti e conserva il QR già stampato.</text>
+
+  <!-- Sharing screen. QR is clearly a placeholder, never a fake code. -->
+  <rect x="1488" y="264" width="360" height="737" rx="24" fill="#FFFFFF" filter="url(#shadow)"/>
+  <rect x="1488" y="264" width="360" height="737" rx="24" fill="none" stroke="#D5DFDA"/>
+  <text x="1514" y="306" class="small muted">← PROFILI</text>
+  <text x="1514" y="351" font-size="26" font-weight="600" letter-spacing="-0.4">Portalo con te.</text>
+  <text x="1514" y="379" class="body muted">Mostra, invia o salva il contatto.</text>
+  <text x="1514" y="420" class="small" font-weight="600">Contesto da condividere</text>
+  <rect x="1514" y="433" width="308" height="43" rx="8" class="input"/>
+  <text x="1529" y="460" class="body">Generale</text>
+  <path d="M1796 451l5 5 5-5" fill="none" stroke="#52645E" stroke-width="1.5"/>
+  <rect x="1548" y="503" width="240" height="240" rx="14" fill="#F6F8F7" stroke="#D5DFDA"/>
+  <rect x="1568" y="523" width="200" height="200" fill="url(#grid)"/>
+  <rect x="1580" y="579" width="176" height="85" rx="8" fill="#F6F8F7"/>
+  <text x="1668" y="615" text-anchor="middle" font-size="38" font-weight="600" class="accent">QR</text>
+  <text x="1668" y="644" text-anchor="middle" class="small muted">URL permanente</text>
+  <text x="1668" y="766" text-anchor="middle" class="small muted">Segnaposto di design / non scansionabile</text>
+  <text x="1668" y="798" text-anchor="middle" class="mono small accent">cards.example.org/c/demo</text>
+  <rect x="1514" y="821" width="148" height="45" rx="10" fill="#17614D"/>
+  <text x="1588" y="849" text-anchor="middle" font-size="14" font-weight="600" class="white">Condividi</text>
+  <rect x="1674" y="821" width="148" height="45" rx="10" class="input"/>
+  <text x="1748" y="849" text-anchor="middle" font-size="14">Copia link</text>
+  <path d="M1514 889H1822" class="rule"/>
+  <text x="1514" y="919" class="body">Scarica QR</text>
+  <text x="1822" y="919" text-anchor="end" class="small muted">PNG / SVG</text>
+  <text x="1514" y="950" class="body">Scarica contatto</text>
+  <text x="1822" y="950" text-anchor="end" class="small muted">.VCF</text>
+  <text x="1514" y="981" class="body">Firma email</text>
+  <text x="1822" y="981" text-anchor="end" class="small muted">HTML / TESTO</text>
+  <text x="1488" y="1046" class="small muted">Sul proprio dominio, senza app.</text>
+  <text x="1488" y="1069" class="small muted">Link e download sempre disponibili come fallback.</text>
+
+  <path d="M72 1140H1848" class="rule"/>
+  <text x="72" y="1174" class="label accent">DIREZIONE VISIVA</text>
+  <rect x="72" y="1195" width="26" height="26" rx="7" fill="#17614D"/>
+  <rect x="105" y="1195" width="26" height="26" rx="7" fill="#182B27"/>
+  <rect x="138" y="1195" width="26" height="26" rx="7" fill="#D5DFDA"/>
+  <text x="180" y="1213" class="small muted">Un accento configurabile. Testi chiari. Nessun font remoto.</text>
+  <text x="760" y="1177" class="body" font-weight="600">Design prima del codice.</text>
+  <text x="760" y="1205" class="small muted">Mockup statici: funzioni, accessibilità e deploy da implementare e verificare.</text>
+  <text x="1848" y="1177" text-anchor="end" class="small muted">DATI FITTIZI / MARCHIO CONFIGURABILE</text>
+  <text x="1848" y="1205" text-anchor="end" class="small muted">Nessun riferimento a persone o organizzazioni reali.</text>
+</svg>

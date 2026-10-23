@@ -1,0 +1,13 @@
+Digital Business Card
+Copyright 2026 mr-jonam contributors
+
+Original planning documents and design artwork are licensed under the Apache License, Version 2.0.
+Maintainer account: https://github.com/mr-jonam
+Contact channel: the maintainer's GitHub profile; do not publish private email addresses.
+
+No third-party logos, photographs, fonts or application libraries are bundled in this planning package.
+The design uses system font fallbacks. Example identities and addresses are demonstration data.
+Funding links identify the maintainer and are independent of the application's configurable branding.
+
+See .provenance/manifest.json for the random project identifier and source integrity record.
+An unsigned manifest is an integrity record, not proof of legal ownership or a trusted timestamp.
