@@ -1,0 +1,11 @@
+<%- include('partials/head') %>
+<h1>Richieste ricevute</h1><p>Ultime 200 richieste dei profili a cui hai accesso. Conservazione configurata: <%= config.privacy.retention %> giorni. Nessun invio automatico al visitatore.</p>
+<% if (!config.smtp) { %><p class="notice warning">SMTP non configurato: i recapiti sono salvati qui; le notifiche restano in attesa.</p><% } %>
+<div class="stack"><% inquiries.forEach(item => { %><article class="panel">
+<p class="eyebrow"><%= item.kind === 'message' ? 'MESSAGGIO' : 'RICONTATTO' %></p><h2><%= item.draft.first_name %> <%= item.draft.last_name %></h2><p><time datetime="<%= item.created_at.toISOString() %>"><%= item.created_at.toLocaleString('it-IT', {timeZone:'Europe/Rome'}) %></time></p>
+<dl><% if(item.name) { %><dt>Nome</dt><dd><%= item.name %></dd><% } %><% if(item.email) { %><dt>Email</dt><dd class="break"><%= item.email %></dd><% } %><% if(item.phone) { %><dt>Telefono</dt><dd><%= item.phone %></dd><% } %></dl><% if(item.message) { %><p class="message-text"><%= item.message %></p><% } %>
+<p>Notifica: <strong><%= {pending:'In attesa',sending:'Invio in corso',sent:'Inviata',failed:'Fallita'}[item.status] || 'Non disponibile' %></strong><% if (item.last_error) { %> · <%= item.last_error %><% } %></p>
+<div class="actions"><% if (['pending','failed'].includes(item.status)) { %><form action="/admin/inquiries/<%= item.id %>/retry" method="post"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="button secondary small" type="submit">Ritenta notifica</button></form><% } %><form action="/admin/inquiries/<%= item.id %>/delete" method="post" data-confirm="Eliminare definitivamente questa richiesta?"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="button danger small" type="submit">Elimina richiesta</button></form></div>
+</article><% }) %></div>
+<% if(!inquiries.length) { %><p class="panel">Nessuna richiesta ricevuta.</p><% } %>
+<%- include('partials/foot') %>

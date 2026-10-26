@@ -1,0 +1,27 @@
+<% for (const kind of ['callback','message']) { const callback=kind==='callback'; %>
+<dialog id="<%= kind %>-dialog" aria-labelledby="<%= kind %>-title">
+  <div class="dialog-header"><p class="eyebrow"><%= callback ? 'RIMANIAMO IN CONTATTO' : 'CONTATTO DIRETTO' %></p><button type="button" class="close-button" data-close aria-label="Chiudi">×</button></div>
+  <h2 id="<%= kind %>-title" tabindex="-1"><%= callback ? 'Lascia i tuoi contatti' : 'Scrivi un messaggio' %></h2>
+  <p class="dialog-intro">Per <%= profile.first_name %> <%= profile.last_name %>. <%= callback ? 'Email o telefono: ne basta uno.' : 'L’indirizzo del destinatario rimane riservato.' %></p>
+  <% if (!preview && config.formsEnabled) { %><form method="post" action="/c/<%= publicId %>/inquiries" data-inquiry>
+    <input type="hidden" name="_csrf" value="<%= csrf %>"><input type="hidden" name="submission_id" value="<%= submissionId %>"><input type="hidden" name="kind" value="<%= kind %>">
+    <div class="honeypot" aria-hidden="true"><label>Sito web<input name="website" tabindex="-1" autocomplete="off"></label></div>
+    <div class="field"><label for="<%= kind %>-name">Il tuo nome (facoltativo)</label><input id="<%= kind %>-name" name="name" maxlength="100" autocomplete="name"></div>
+    <div class="field"><label for="<%= kind %>-email">La tua email<%= callback ? ' (oppure telefono)' : '' %></label><input id="<%= kind %>-email" name="email" type="email" maxlength="254" autocomplete="email" inputmode="email" <%= callback ? '' : 'required' %>></div>
+    <% if (callback) { %><div class="field"><label for="callback-phone">Il tuo numero di telefono (oppure email)</label><input id="callback-phone" name="phone" type="tel" maxlength="40" autocomplete="tel" aria-describedby="phone-hint"><p id="phone-hint" class="field-hint">Includi il prefisso internazionale, per esempio +39.</p></div><% } else { %><div class="field"><label for="message-body">Messaggio</label><textarea id="message-body" name="message" required maxlength="3000" rows="4"></textarea></div><% } %>
+    <details class="privacy-text"><summary>Come utilizziamo i tuoi dati</summary><p>Titolare: <%= config.privacy.controller %>. Contatto privacy: <%= config.privacy.contact %>.</p><p><%= config.privacy.notice %></p><p>Conservazione nel sistema: <%= config.privacy.retention %> giorni. Nessuna iscrizione automatica a newsletter.</p></details>
+    <button type="submit" class="button button-primary"><%= callback ? 'Richiedi ricontatto' : 'Invia messaggio' %></button><p class="form-status" role="status" aria-live="polite"></p>
+  </form><% } else { %><p>Modulo disattivato in questa modalità.</p><% } %>
+</dialog><% } %>
+<dialog id="contact-dialog" aria-labelledby="contact-title"><div class="dialog-header"><p class="eyebrow">SUL TUO TELEFONO</p><button type="button" class="close-button" data-close aria-label="Chiudi">×</button></div><h2 id="contact-title" tabindex="-1">Aggiungi contatto</h2>
+  <div class="contact-summary"><strong><%= profile.first_name %> <%= profile.last_name %></strong><span><%= profile.title %></span></div>
+  <p class="platform-note">Il telefono può aprire l’anteprima del contatto. Alcuni browser, soprattutto su Android, scaricano un file che va aperto. Conferma il salvataggio nell’app Contatti.</p>
+  <% if (!preview) { %><a class="button button-primary" href="/c/<%= publicId %>/contact.vcf">Apri contatto sul telefono</a><% } %>
+  <button type="button" class="button button-light" id="copy-contact">Copia i dati del contatto</button>
+  <div id="copy-fallback" hidden><label for="contact-data">Dati del contatto selezionabili</label><textarea id="contact-data" rows="6" readonly><%= [profile.first_name+' '+profile.last_name,profile.title,profile.phone,...profile.links.map(link=>link.label+': '+link.url),cardUrl(publicId)].filter(Boolean).join('\n') %></textarea></div><p class="form-status" id="copy-status" role="status"></p>
+  <p class="privacy-text">L’email privata non è inclusa: dal contatto puoi tornare a questa scheda per scrivere.</p>
+  <% if (!preview && config.formsEnabled) { %><div class="exchange-contact"><p>Vuoi essere ricontattato?</p><button type="button" class="button button-primary" data-dialog="callback-dialog">Lascia i tuoi contatti</button></div><% } %>
+</dialog>
+<% if (!preview) { %><dialog id="qr-dialog" aria-labelledby="qr-title"><div class="dialog-header"><p class="eyebrow">CONDIVIDI</p><button type="button" class="close-button" data-close aria-label="Chiudi">×</button></div><h2 id="qr-title" tabindex="-1">Inquadra il QR</h2><img class="public-qr" src="/c/<%= publicId %>/qr.png" alt="QR con il link di questa scheda" width="300" height="300"><p>Apri questa scheda da un altro telefono.</p><button type="button" class="button button-primary" data-share-url="<%= cardUrl(publicId) %>">Condividi il link</button><p role="status" id="share-status"></p></dialog><% } %>
+<dialog id="info-dialog" aria-labelledby="info-title"><div class="dialog-header"><p class="eyebrow">INFORMAZIONI</p><button type="button" class="close-button" data-close aria-label="Chiudi">×</button></div><h2 id="info-title" tabindex="-1">Informativa privacy</h2><p>Titolare: <%= config.privacy.controller || 'Configurazione in corso' %>.</p><p><%= config.privacy.notice || 'I moduli di contatto sono disattivati.' %></p><p>Contatto privacy: <%= config.privacy.contact %>. Conservazione nel sistema: <%= config.privacy.retention %> giorni.</p><p>Usiamo un cookie tecnico per sicurezza e funzionamento dei moduli. Nessun tracciamento pubblicitario.</p></dialog>
+

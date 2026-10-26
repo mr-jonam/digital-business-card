@@ -1,0 +1,9 @@
+<%- include('partials/head') %>
+<div class="heading"><div><p class="eyebrow">PROFILI E CONDIVISIONE</p><h1>Biglietti da visita</h1></div><% if (user.role === 'admin') { %><a href="/admin/profiles/new" class="button">Crea profilo</a><% } %></div>
+<% if (!config.formsEnabled) { %><p class="notice warning">I moduli pubblici sono disattivati: configura titolare, contatto e informativa privacy nel file di ambiente.</p><% } %>
+<% if (!config.smtp) { %><p class="notice warning">SMTP non configurato. Le richieste vengono salvate; le notifiche rimangono in attesa.</p><% } %>
+<div class="card-grid">
+<% profiles.forEach(row => { %><article class="panel"><span class="state"><%= {draft:'Bozza',published:'Pubblicato',suspended:'Sospeso'}[row.status] %></span><h2><%= row.draft.first_name %> <%= row.draft.last_name %></h2><p><%= row.draft.title %></p><p class="hint">Bozza v<%= row.version %> · Revisione pubblica <%= row.revision %></p><div class="actions"><a class="button" href="/admin/profiles/<%= row.id %>">Gestisci</a><% if (row.status === 'published') { %><a class="button secondary" href="/admin/profiles/<%= row.id %>/share">QR e condivisione</a><% } %></div></article><% }) %>
+</div>
+<% if (!profiles.length) { %><p class="panel">Nessun profilo disponibile. Crea il primo biglietto oppure importa il file dei profili.</p><% } %>
+<%- include('partials/foot') %>

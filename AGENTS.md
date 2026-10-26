@@ -1,20 +1,24 @@
 # Digital Business Card — mappa minima
 
-- Stato: repository di progettazione; nessuna applicazione o dipendenza installata.
-- Specifica prodotto: `docs/PRODUCT-UX.md`.
-- Contratto tecnico: `docs/TECHNICAL-BLUEPRINT.md`.
-- Deployment previsto: `docs/AZURE-WINDOWS.md`.
-- Ordine e test: `docs/IMPLEMENTATION-PLAN.md`.
-- Design originale: `docs/design/overview.svg`; PNG derivato per anteprima.
-- Stack proposto: PHP/Laravel server-rendered, MySQL 8.4 LTS, Apache 2.4 Windows.
-- Entrypoint futuri: `public/index.php`, `artisan`; non ancora presenti.
-- Test futuri: `php artisan test`, smoke test HTTP e browser; non ancora eseguibili.
-- Config futura: `.env` privato; distribuire solo un `.env.example` senza segreti.
-- CI: assente per scelta; nessun workflow da attivare senza necessità/autorizzazione.
-- Comandi attuali: `git status --short`, `git diff --check`.
-- Nessun dato personale reale, nome aziendale, logo di terzi o URL di profili reali nei demo.
-- Una organizzazione per installazione; ruoli e ownership dei profili devono essere verificati sul server.
-- Schema, comandi e rotte nei documenti sono contratti progettuali, non funzionalità esistenti.
-- Licenza: Apache-2.0 per gli artefatti originali; terze parti da verificare prima di introdurle.
-- Fondi: usare solo i canali già approvati in `.github/FUNDING.yml`.
-- Pubblicazione GitHub, deploy e release sono rinviati alla fase successiva.
+- Stato: MVP reale Node 22.13+/Express 5/EJS/MySQL 8.0+, 26 ottobre 2026.
+- Entrypoint web: `src/server.js`; routing `src/app.js`; worker SMTP/retention `src/worker.js`.
+- CLI: `src/cli.js` (migrate, user:add, user:reset, import, purge).
+- Dati: `migrations/001-initial.sql`; store sessioni, pool e transazioni in `src/db.js`.
+- Auth/CSRF/TOTP: `src/auth.js`, `src/security.js`; validazione e snapshot: `src/validation.js`.
+- Profili, vCard/QR, media e outbox: `src/profiles.js`, `contact.js`, `media.js`, `delivery.js`.
+- UI: template `views/`, asset originali `public/`; niente React, PHP o build frontend.
+- Config: `.env.example`; .env, storage e dati reali ignorati. Brand esterno via BRAND_FILE.
+- Build/check: `npm.cmd ci`, `npm.cmd run check`; avvio `npm.cmd start`, `npm.cmd run worker`.
+- Test: `npm.cmd test`, database MySQL locale disposable; TEST_DATABASE_URL con DDL; Chrome/Edge o Playwright Chromium. Non usare database remoti o produzione.
+- Packager: `npm.cmd run package:deploy`, allowlist in `scripts/package.js`, output `dist/` ignorato.
+- Deploy attuale: `docs/UBUNTU-DEPLOY.md`, `deploy/install.sh`, unit systemd web e worker; Apache proxy 3600. Config privata esterna e utenza DB DML; DDL solo installatore.
+- CI: assente per scelta. Nessun workflow, servizio a pagamento o deploy automatico.
+- Blueprint sotto docs e disegni sono storici: Laravel/Windows non è lo stack implementato.
+- Non importare nomi, email, loghi o profili reali dalla repo privata sorella.
+- Destinatario escluso da snapshot pubblico, vCard, QR e HTML. Tutti gli invii passano da outbox server; nessun mailto pubblico.
+- Non promettere salvataggio diretto in rubrica; vCard inline e QR contatto richiedono collaudo su OS reali.
+- URL pubblici permanenti; bozze non visibili fino a pubblicazione; editor limitati a ownership sul server.
+- Licenze originali Apache-2.0, terze parti in THIRD-PARTY-NOTICES.md; libvips opzionale LGPL, nessun binario nel pacchetto sorgenti.
+- Conservare manifest iniziale e aggiungere record di integrità senza segreti. Nessuna firma o busta identità configurata.
+- Fondi: soltanto canali approvati in .github/FUNDING.yml. Variante privata mai pubblica.
+- Git: commit separati validati, nessuna modifica estranea, push solo autorizzato.

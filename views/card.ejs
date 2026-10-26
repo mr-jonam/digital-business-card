@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="color-scheme" content="light">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/assets/card.css">
+  <script src="/assets/appearance.js" defer></script>
+  <script src="/assets/card.js" defer></script>
+  <script src="/assets/ambient.js" defer></script>
+</head>
+<body data-art="qa-platforms" data-finish="holo" data-backdrop="qa-grid">
+  <div class="ambient-grid" aria-hidden="true"><canvas></canvas></div>
+  <a class="skip-link" href="#person-name">Vai al biglietto da visita</a>
+  <svg class="icon-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="m7 3 3 5-2 2a14 14 0 0 0 6 6l2-2 5 3-1 4C10 22 2 14 3 4Z"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12"/></symbol>
+    <symbol id="i-contact" viewBox="0 0 24 24"><rect x="5" y="3" width="15" height="18" rx="3"/><path d="M3 7h4M3 12h4M3 17h4m5-1h4"/><circle cx="14" cy="10" r="2"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
+  </svg>
+<noscript><p class="noscript">I moduli sono disponibili dopo il biglietto.</p></noscript><% if (preview) { %><p class="preview-notice">Anteprima bozza · moduli disattivati. <a href="/admin/profiles/<%= profileId %>">Torna al pannello</a></p><% } %>
+  <main class="workbench" id="main-content">
+    <section class="stage" aria-label="Biglietto da visita">
+      <div class="scene">
+        <article class="badge" id="badge" data-appearance="<%= JSON.stringify(profile.appearance) %>" aria-labelledby="person-name">
+          <div class="metal-rim" aria-hidden="true"><div class="rim-facets"></div><div class="rim-light"></div></div>
+          <div class="badge-face" aria-hidden="true"></div>
+          <div class="badge-content">
+            <div class="brand-row depth-brand">
+              <% if (brand.logo) { %><img src="/brand/logo" alt="<%= brand.name %>" width="652" height="283" class="badge-logo"><% } else { %><span class="brand-name"><%= brand.name %></span><% } %>
+              <label class="motion-control"><input type="checkbox" id="motion-toggle" checked aria-describedby="motion-state"><span>Effetti</span><span class="visually-hidden" id="motion-state" role="status">Attivi con il mouse</span></label>
+            </div>
+            <div class="identity">
+              <div class="portrait" aria-hidden="true"><% if (profile.photo) { %><img src="<%= preview ? `/admin/profiles/${profileId}/photo` : `/c/${publicId}/photo` %>" alt="" width="96" height="96"><% } else { %><span><%= profile.first_name[0] %><%= profile.last_name[0] %></span><% } %></div>
+              <div class="person depth-identity">
+                <h1 id="person-name" tabindex="-1"><%= profile.first_name %> <br><%= profile.last_name %></h1>
+                <p class="person-title" lang="en"><%= profile.title %><% if (profile.company) { %><span><%= profile.company %></span><% } %></p>
+              </div>
+            </div>
+            <div class="main-action depth-action">
+              <button type="button" class="button button-primary" <%= preview || !config.formsEnabled ? "disabled" : "" %> data-dialog="callback-dialog" aria-haspopup="dialog" aria-describedby="callback-hint"><svg class="icon" aria-hidden="true"><use href="#i-contact"/></svg>Lascia i tuoi contatti</button>
+              <p class="action-hint" id="callback-hint"><%= config.formsEnabled && !preview ? "Email o telefono: ne basta uno per ricontattarti." : "Ricezione delle richieste disattivata in questa modalità." %></p>
+              <button type="button" class="button button-secondary" <%= preview || !config.formsEnabled ? "disabled" : "" %> data-dialog="message-dialog" aria-haspopup="dialog"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>Scrivi un messaggio</button>
+            </div>
+<% if (profile.phone) { %><a class="link-cta depth-action" href="tel:<%= profile.phone %>"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg><span class="link-copy"><strong>Chiama</strong><span><%= profile.phone %></span></span></a><% } %>
+<% if (profile.links.length) { %><nav class="expertise depth-identity" aria-label="Link del profilo"><% profile.links.forEach((link,index)=>{ %>
+<a class="link-cta <%= link.kind==='linkedin' ? 'linkedin-cta' : 'expertise-cta' %>" href="<%= link.url %>" target="_blank" rel="noopener noreferrer external" data-external><span class="link-mark" aria-hidden="true"><%= link.kind==='linkedin' ? 'in' : String(index+1).padStart(2,'0') %></span><span class="link-copy"><strong><%= link.label %></strong><span><%= link.description || 'Apri il sito' %><span class="visually-hidden"> · nuova scheda</span></span></span><svg class="icon link-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+<% }); %></nav><% } %>            <div class="secondary-actions depth-action">
+              <button type="button" class="button button-secondary" data-dialog="contact-dialog" aria-haspopup="dialog"><svg class="icon" aria-hidden="true"><use href="#i-contact"/></svg>Aggiungi contatto</button>
+            </div>
+            <footer class="badge-footer depth-brand">
+              <button type="button" data-info="privacy" aria-haspopup="dialog">Informativa privacy</button><% if (!preview) { %><button type="button" data-dialog="qr-dialog">Mostra QR</button><% } %>
+              <% if (brand.mark) { %><img src="/brand/mark" alt="" width="283" height="283"><% } %>
+            </footer>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+<%- include('partials/card-dialogs') %></body></html>

@@ -1,0 +1,27 @@
+[Unit]
+Description=Digital business cards outbox and retention worker
+After=network.target mysql.service
+Wants=mysql.service
+
+[Service]
+Type=simple
+User=dppapp
+Group=dppapp
+WorkingDirectory=/srv/dpp/cards/app
+EnvironmentFile=/srv/dpp/config/cards.env
+ExecStart=/usr/bin/node src/worker.js
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=35
+UMask=0027
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/srv/dpp/cards/storage
+CapabilityBoundingSet=
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+MemoryMax=256M
+
+[Install]
+WantedBy=multi-user.target

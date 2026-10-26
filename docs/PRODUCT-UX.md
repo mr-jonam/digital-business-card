@@ -1,3 +1,5 @@
+> Documento storico di progettazione (23 ottobre 2026). Dal 26 ottobre lo stack implementato è Node.js 22+/Express/EJS/MySQL. Per funzioni attuali e deploy usare README.md e docs/UBUNTU-DEPLOY.md; le parti Laravel/Windows e le funzioni future qui descritte non sono la procedura corrente.
+
 # Prodotto, esperienza e design
 
 Specifica proposta, 23 ottobre 2026. Nessuna funzione descritta è già implementata.

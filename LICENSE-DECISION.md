@@ -1,6 +1,20 @@
 # Decisione di licenza e provenienza
 
-Data: 23 ottobre 2026. Stato: revisione iniziale degli artefatti di progettazione.
+Revisione corrente: 26 ottobre 2026, MVP implementato. La decisione iniziale del 23 ottobre è conservata più sotto come registro storico.
+
+## Revisione del software implementato
+
+- Codice Node/Express/EJS, CSS/JS/Canvas, template, documentazione e artwork QA originali: Apache-2.0, come richiesto dall’utente, per riuso commerciale e concessione brevettuale esplicita. LICENSE ufficiale invariata.
+- Componenti npm diretti e transitivi: inventario di 173 componenti nel lockfile, 139 file di licenza/avviso raccolti in THIRD-PARTY-NOTICES.md. MIT, Apache-2.0, ISC, BSD-3-Clause, 0BSD e MIT-0 conservano i propri avvisi. busboy e streamsearch verificati nei rispettivi LICENSE upstream (MIT), anche se il lockfile omette il campo license.
+- sharp è Apache-2.0; i pacchetti libvips opzionali includono LGPL-3.0-or-later e avvisi ulteriori. Il pacchetto di deploy distribuisce sorgenti e lockfile, senza node_modules o binari. npm ci installa su Linux i componenti con le relative licenze. In caso di futura redistribuzione dei binari, raccogliere avvisi, sorgenti corrispondenti e obblighi LGPL di sostituzione/relinking per quella piattaforma. La licenza Apache dell’app non sostituisce la LGPL dei binari.
+- Node, Ubuntu, MySQL e Apache sono installati separatamente, non redistribuiti. Foto, loghi e dati reali sono esclusi dalla repository neutra e forniti come configurazione privata esterna. Nessun sorgente ReactBits né font esterno importato.
+- Audit npm sulle dipendenze di produzione del 26 ottobre 2026: nessuna vulnerabilità nota segnalata. Non è una garanzia per il futuro.
+- Nessun nuovo contributore esterno o materiale contrattuale inserito. La titolarità contrattuale dei materiali forniti dall’utente rimane fuori dalla concessione del progetto neutro.
+- Manifest iniziale preservato. Nuovo record con hash dei file e licenza, UUID/token separati; firma digitale e busta identità restano non configurate perché mancano chiavi controllate dall’utente. Nessun identificativo privato o segreto nel registro pubblico.
+
+## Registro iniziale
+
+Data: 23 ottobre 2026. Ambito iniziale: artefatti di progettazione.
 
 ## Obiettivo e scelta
 

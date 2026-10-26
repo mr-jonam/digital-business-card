@@ -1,0 +1,41 @@
+{
+  "name": "digital-business-card",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env src/server.js",
+    "worker": "node --env-file-if-exists=.env src/worker.js",
+    "migrate": "node --env-file-if-exists=.env src/cli.js migrate",
+    "user:add": "node --env-file-if-exists=.env src/cli.js user:add",
+    "user:reset": "node --env-file-if-exists=.env src/cli.js user:reset",
+    "import": "node --env-file-if-exists=.env src/cli.js import",
+    "purge": "node --env-file-if-exists=.env src/cli.js purge",
+    "test": "node --test --test-concurrency=1 test/*.test.js",
+    "check": "node scripts/check.js",
+    "package:deploy": "node scripts/package.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "libphonenumber-js": "^1.12.29",
+    "multer": "^2.0.2",
+    "mysql2": "^3.15.3",
+    "nodemailer": "^10.2.1",
+    "otpauth": "^9.4.1",
+    "qrcode": "^1.5.4",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "jsqr": "^1.4.0",
+    "playwright": "^1.56.1",
+    "smtp-server": "^3.16.1"
+  }
+}

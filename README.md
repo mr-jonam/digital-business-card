@@ -1,45 +1,62 @@
 # Digital Business Card
 
-Design e blueprint di un sistema di biglietti da visita digitali, indipendente dal marchio e installabile su infrastruttura propria.
+Web app self-hosted per biglietti da visita, QR e richieste di ricontatto. Un’installazione ospita più profili; marchio, recapiti e foto sono configurati fuori dal repository. Nessun servizio QR a pagamento o CDN richiesto.
 
-**Stato: progettazione, 23 ottobre 2026.** L'applicazione non è implementata, avviabile o pronta per il deploy. I mockup sono immagini di progetto; il riquadro QR non è scansionabile. Le istruzioni operative descrivono l'installazione futura e non sono ancora validate su una VM.
+**MVP implementato e testato localmente il 26 ottobre 2026.** Il deploy su una VM reale, le credenziali SMTP e l’importazione nella rubrica iOS/Android richiedono un collaudo nell’ambiente di destinazione.
 
-## Risultato previsto
+## Funzioni
 
-Una scheda pubblica per persona con recapiti, siti, LinkedIn e download vCard. Un collegamento permanente permette di aggiornare la scheda senza ristampare il QR. L'utente può mostrare il QR dal telefono, inviare il collegamento o condividere il file contatto.
+- Schede pubbliche con foto o iniziali, nome, ruolo, telefono facoltativo, LinkedIn e siti.
+- CTA principale «Lascia i tuoi contatti»: email e/o telefono, conservati nel pannello e notificati tramite coda SMTP. Form messaggio senza mailto; email del titolare esclusa da HTML pubblico, QR e vCard.
+- Pannello amministratore/editor, assegnazione profili, bozze, pubblicazione esplicita, URL permanenti e sospensione.
+- QR pagina aggiornabile e QR contatto con vCard incorporata offline; PNG/SVG, due colori di scansione sicuri.
+- Pulsante contatto con risposta vCard inline. Il sistema operativo decide se aprire la rubrica o scaricare: nessuna API web può garantire un salvataggio diretto universale. I QR contatto già distribuiti non si aggiornano né si revocano.
+- Temi, colori corretti per il contrasto, artwork QA, riflessi metallici casuali, profondità e griglia reattiva; touch e movimento ridotto disattivano il movimento.
+- Login, TOTP obbligatorio per amministratori, sessioni MySQL, CSRF, limitazione tentativi, foto ricodificate senza metadati, retention e audit.
 
-Un'installazione ospita una sola organizzazione e più persone. Logo, colori, testi e dominio sono configurabili. Nessun riferimento personale o aziendale è incorporato nell'interfaccia o nei dati dimostrativi.
+## Stack e avvio locale
 
-## Documenti
+Node.js **22.13+**, Express 5, EJS, MySQL 8.0+, CSS/JavaScript/Canvas. Le dipendenze sono bloccate nel lockfile. Nessuna compilazione React/PHP.
 
-| Documento | Contenuto |
-| --- | --- |
-| [Prodotto e UX](docs/PRODUCT-UX.md) | Obiettivi, flussi, schermate, stati, design system e perimetro MVP |
-| [Blueprint tecnico](docs/TECHNICAL-BLUEPRINT.md) | Architettura, dati, rotte, pubblicazione, QR, vCard e sicurezza |
-| [Azure Windows](docs/AZURE-WINDOWS.md) | Topologia Apache/PHP/MySQL, procedura prevista, backup e rollback |
-| [Piano di implementazione](docs/IMPLEMENTATION-PLAN.md) | Milestone, dipendenze, test e criteri di prontezza |
-| [Decisione di licenza](LICENSE-DECISION.md) | Componenti, licenza, provenienza e verifiche prima della pubblicazione |
+1. Creare un database MySQL locale dedicato e un’utenza con permessi di migrazione.
+2. Copiare `.env.example` in `.env`; impostare DATABASE_URL, SESSION_SECRET casuale e PUBLIC_ORIGIN. Per usare i form compilare i tre campi privacy con i dati effettivi. Non usare credenziali di produzione per i test.
+3. Eseguire:
 
-## Design
+```sh
+npm ci
+npm run migrate
+npm run user:add -- --email admin@example.org
+npm start
+```
 
-![Tavola delle tre schermate progettate](docs/design/overview.png)
+Il comando account mostra una password casuale: conservarla privatamente. Aprire `http://127.0.0.1:3600/admin`, associare Authenticator e creare/pubblicare i profili. In un secondo terminale eseguire `npm run worker` per SMTP e retention. Su Windows utilizzare `npm.cmd` se PowerShell blocca npm.ps1.
 
-La tavola comprende scheda pubblica, editor con anteprima e modalità di condivisione. Il sorgente vettoriale modificabile è [overview.svg](docs/design/overview.svg).
+La produzione usa un’utenza MySQL limitata a SELECT/INSERT/UPDATE/DELETE; l’installatore applica lo schema attraverso il socket amministrativo locale. L’origine pubblica HTTPS deve essere definitiva prima di stampare i QR.
 
-## Scelte proposte
+## Deploy Ubuntu / Azure
 
-- PHP/Laravel con rendering server e JavaScript progressivo; MySQL 8.4 LTS; Apache 2.4 su Windows x64.
-- Pagine pubbliche accessibili senza account e senza app; autenticazione per gestione e pubblicazione.
-- Configurazione e file caricati separati dal codice pubblico; dipendenze distribuite localmente, senza CDN nel percorso pubblico.
-- Nessun abbonamento a generatori QR e nessuna raccolta di contatti dei visitatori nell'MVP.
-- Nessuna pipeline, pubblicazione, infrastruttura cloud o risorsa a pagamento viene attivata in questa fase.
+Seguire [la guida WinSCP e Ubuntu 24.04](docs/UBUNTU-DEPLOY.md). Generare il pacchetto con `npm run package:deploy`: include solo sorgenti e configurazione di esempio. Servizi systemd separati per web e worker, Apache reverse proxy, MySQL dedicato. La guida permette di affiancare un’altra app sotto `/dpp/`.
 
-Le versioni precise, le estensioni PHP e le dipendenze verranno bloccate e verificate alla prima milestone di implementazione.
+Logo e profili reali sono un pacchetto privato separato. Non caricare .env, database, storage, credenziali o loghi aziendali nella repository pubblica. Nessun deploy, workflow CI, abbonamento o release viene attivato automaticamente.
 
-## Licenza e sostegno
+## Verifica
 
-Documenti e disegni originali: [Apache License 2.0](LICENSE). Le dipendenze future conserveranno le proprie licenze. Vedere [NOTICE](NOTICE) e [LICENSE-DECISION.md](LICENSE-DECISION.md).
+```sh
+npm run check
+npm test
+npm audit --omit=dev
+```
 
-I canali di sostegno configurati dal manutentore sono predisposti in [.github/FUNDING.yml](.github/FUNDING.yml), su richiesta dell'utente. Non fanno parte del marchio o dei dati dell'applicazione.
+I test richiedono MySQL **locale** con permesso di creare/eliminare un database temporaneo. Impostare TEST_DATABASE_URL; in alternativa leggono DATABASE_URL dal .env locale. Il database indicato non viene svuotato: ogni esecuzione crea ed elimina un database `cards_test_*` dedicato. Il test browser usa Chrome/Edge installato su Windows, oppure Chromium di Playwright (`npx playwright install chromium`). SMTP di prova locale, nessun invio a caselle reali.
 
-La creazione della repository pubblica è rinviata alla fase di implementazione e alla verifica degli artefatti di pubblicazione. Una repository pubblica consente già visione e fork nei termini della piattaforma.
+Copertura: autorizzazioni, CSRF, conflitti di modifica, snapshot pubblicati, decodifica indipendente dei QR, form e persistenza, idempotenza/outbox, invio e retry SMTP, enrollment TOTP, upload/pubblicazione foto via UI, sospensione e retention. UI verificata a 320/390 px, tastiera, dialoghi, modalità senza JS e controlli automatici Axe. Non equivale a una certificazione WCAG o a prove su telefoni reali.
+
+`/health/live` verifica il processo; `/health/ready` verifica schema e configurazione privacy. Nessuno dei due certifica consegna SMTP, validità dell’informativa o integrazione con la rubrica.
+
+## Documenti e licenza
+
+Il README e la guida Ubuntu descrivono il software attuale. I blueprint e i disegni sotto docs conservano la progettazione iniziale: Laravel/Windows, schermate e funzionalità future presenti in quei documenti non costituiscono la procedura attuale.
+
+Codice, template, documentazione e artwork originali: [Apache-2.0](LICENSE). Dipendenze e binari opzionali conservano le loro licenze: [NOTICE](NOTICE), [inventario e avvisi](THIRD-PARTY-NOTICES.md), [decisione e provenienza](LICENSE-DECISION.md). I marchi esterni non sono inclusi nella concessione.
+
+I canali di sostegno già approvati sono in [.github/FUNDING.yml](.github/FUNDING.yml), indipendenti dal brand dell’app. Una repository pubblica consente visione e fork secondo i termini della piattaforma e i diritti della licenza.

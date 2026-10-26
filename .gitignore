@@ -16,3 +16,8 @@ public/build/
 *.agekey
 .DS_Store
 Thumbs.db
+
+.npm-cache/
+dist/
+.test-*/
+!migrations/*.sql

@@ -1,0 +1,17 @@
+<%- include('partials/head') %>
+<h1>Sicurezza account</h1>
+<% if (secret) { %>
+<section class="panel narrow"><h2>Attiva la verifica in due passaggi</h2><p>Inquadra il codice con Microsoft Authenticator, Google Authenticator o un’app compatibile. Conserva l’accesso alla VM: permette il recupero se perdi il telefono.</p>
+<img class="qr" src="/admin/security/qr.png" alt="QR per configurare l’app Authenticator" width="280" height="280">
+<details><summary>Inserimento manuale</summary><p>Chiave segreta: <code class="break"><%= secret %></code></p><p>TOTP · 6 cifre · ogni 30 secondi</p></details>
+<form method="post" action="/admin/security/totp" class="stack"><input type="hidden" name="_csrf" value="<%= csrf %>"><label>Codice dell’app<input name="otp" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required></label><button class="button" type="submit">Attiva e continua</button></form></section>
+<% } else { %><p class="notice">Verifica in due passaggi attiva.</p><% } %>
+<% if (!secret || user.role === 'editor') { %>
+<section class="panel narrow"><h2>Cambia password</h2><form method="post" action="/admin/security/password" class="stack">
+<input type="hidden" name="_csrf" value="<%= csrf %>">
+<label>Password corrente<input name="current_password" type="password" autocomplete="current-password" required></label>
+<label>Nuova password<input name="new_password" type="password" autocomplete="new-password" minlength="14" maxlength="72" required></label>
+<label>Conferma nuova password<input name="confirm_password" type="password" autocomplete="new-password" minlength="14" maxlength="72" required></label>
+<p class="hint">Almeno 14 caratteri, massimo 72 byte. Il cambio chiude tutte le sessioni.</p><button class="button" type="submit">Aggiorna password</button></form></section>
+<% } %>
+<%- include('partials/foot') %>
