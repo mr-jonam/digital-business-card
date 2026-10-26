@@ -100,7 +100,15 @@ test('MySQL, HTTP, SMTP and mobile browser journeys', {timeout:180000}, async t=
       const {violations}=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();
       assert.deepEqual(violations.map(v=>({id:v.id,nodes:v.nodes.length})),[]);
       await page.keyboard.press('Escape');assert.equal(await page.locator('dialog[open]').count(),0);
-      await page.getByRole('button',{name:'Mostra QR'}).click();await page.getByRole('heading',{name:'Inquadra il QR'}).waitFor();await page.keyboard.press('Escape');
+      const qrButton=page.getByRole('button',{name:'Mostra QR'});
+      assert.ok((await qrButton.boundingBox()).height>=48);
+      await qrButton.click();await page.getByRole('heading',{name:'Inquadra il QR'}).waitFor();
+      assert.equal(await page.getByRole('button',{name:'Lascia i tuoi contatti',exact:true}).isVisible(),false);
+      const qrAccess=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();
+      assert.deepEqual(qrAccess.violations.map(v=>({id:v.id,nodes:v.nodes.length})),[]);
+      await page.keyboard.press('Escape');await qrButton.waitFor();assert.equal(await qrButton.evaluate(el=>el===document.activeElement),true);
+      await page.locator('#person-name').click();await page.getByRole('heading',{name:'Inquadra il QR'}).waitFor();
+      await page.getByRole('button',{name:'Torna al biglietto',exact:false}).click();await qrButton.waitFor();
       await page.setViewportSize({width:320,height:740});assert.equal(await page.locator('body').evaluate(el=>el.scrollWidth<=innerWidth),true);
       await page.setViewportSize({width:1280,height:1000});await page.screenshot({path:storage+'/desktop.png',fullPage:true});
       await page.setViewportSize({width:390,height:844});await page.screenshot({path:storage+'/mobile.png',fullPage:true});
@@ -111,7 +119,21 @@ test('MySQL, HTTP, SMTP and mobile browser journeys', {timeout:180000}, async t=
       await page.getByRole('button',{name:'Richiedi ricontatto'}).click();assert.equal((await submitted).status(),201);
       const [[saved]]=await pool.execute('SELECT COUNT(*) n FROM inquiries WHERE email=?',['mobile@example.org']);assert.equal(saved.n,1);
       await pool.execute('DELETE FROM inquiries WHERE email=?',['mobile@example.org']);
-      const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});const simple=await nojs.newPage();await simple.goto(base+card);assert.equal(await simple.locator('#callback-dialog form').isVisible(),true);await nojs.close();
+      const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});const simple=await nojs.newPage();await simple.goto(base+card);assert.equal(await simple.locator('#callback-dialog form').isVisible(),true);assert.equal(await simple.locator('#card-back .public-qr').isVisible(),true);await nojs.close();
+      const touch=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'no-preference'}),mobile=await touch.newPage();
+      await mobile.goto(base+card);await mobile.waitForFunction(()=>document.body.classList.contains('js-ready'));
+      await Promise.all([
+        mobile.waitForFunction(()=>getComputedStyle(document.getElementById('badge')).transform.startsWith('matrix3d('),{},{polling:'raf'}),
+        mobile.getByRole('button',{name:'Mostra QR'}).tap()
+      ]);
+      await mobile.waitForFunction(()=>!document.getElementById('badge').classList.contains('is-flipping'));
+      await mobile.getByRole('heading',{name:'Inquadra il QR'}).waitFor();
+      await mobile.getByRole('button',{name:'Torna al biglietto',exact:false}).tap();
+      await mobile.waitForFunction(()=>!document.getElementById('badge').classList.contains('is-flipping'));
+      await mobile.getByRole('button',{name:'Lascia i tuoi contatti',exact:true}).first().tap();
+      assert.equal(await mobile.locator('#callback-dialog[open]').count(),1);
+      assert.equal(await mobile.locator('#card-back').isVisible(),false);
+      await touch.close();
       await context.close();
     });
     await t.test('First administrator enrollment, image upload and publication through the UI',async()=>{

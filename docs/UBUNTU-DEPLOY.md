@@ -185,6 +185,10 @@ La sezione **QR e condivisione** offre PNG/SVG e copia/condivisione del link:
 - **QR pagina**: URL permanente `/c/ID_CASUALE`, aggiornabile ripubblicando il profilo. È la scelta consigliata per stampa e NFC.
 - **QR contatto**: dati vCard incorporati, senza email privata. Le copie già stampate non si aggiornano e non si possono revocare.
 
+Il QR pagina contiene **`PUBLIC_ORIGIN/c/ID_CASUALE`**. In `/srv/dpp/config/cards.env` imposta `PUBLIC_ORIGIN=https://TUO_HOST`, senza barra finale o percorsi. Dopo averlo modificato riavvia `dpp-cards` e `dpp-cards-worker`. Le immagini generate dal server useranno questa origine; i QR già scaricati con localhost o un altro dominio non cambiano. Importando i profili in un database nuovo vengono assegnati nuovi ID: pubblica sulla VM, poi genera e stampa i QR definitivi. Conservare il database durante gli aggiornamenti mantiene gli URL.
+
+Sulla scheda pubblica «Mostra QR» è un pulsante grande; anche un tap su uno spazio libero gira la scheda. Con movimento ridotto il cambio è immediato. Se `brand.json` indica un file PNG nella proprietà `mark`, il simbolo compare al centro del QR. I file del marchio devono essere nella cartella privata del brand. Sul retro puoi togliere «Simbolo al centro»; nel pannello puoi esportare entrambe le versioni. Gli endpoint `/c/ID_CASUALE/qr.png` e `.svg` accettano `?logo=0` per ometterlo, anche insieme a `mode=contact`. Il simbolo usa una piccola area bianca e correzione errori H: controlla comunque la scansione sui telefoni prima di stampare.
+
 Il pulsante della scheda apre una risposta vCard con disposizione `inline`, senza forzare un download. iOS e Android possono comunque comportarsi diversamente: il sito non può scrivere direttamente nella rubrica. Il collaudo su telefoni reali resta necessario.
 
 Le richieste sono visibili in **Richieste ricevute**, con stato della notifica e possibilità di ritentare o cancellare. Puoi aggiungere editor tramite CLI e assegnare loro i profili dal pannello amministratore:

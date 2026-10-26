@@ -58,7 +58,7 @@ export async function createApp(pool, config) {
     if (!['png','svg'].includes(req.params.format)) throw new InputError('Formato non disponibile.', 404);
     const row = await publicProfile(pool, req.params.publicId);
     const mode = req.query.mode === 'contact' ? 'contact' : 'page';
-    const body = await qr(row.published, cardUrl(config, row.public_id), mode, req.params.format);
+    const body = await qr(row.published, cardUrl(config, row.public_id), mode, req.params.format, req.query.logo === '0' ? null : brand.mark);
     res.type(req.params.format === 'svg' ? 'image/svg+xml' : 'image/png');
     if (req.query.download === '1') res.set('Content-Disposition', `attachment; filename="qr-${mode}.${req.params.format}"`);
     res.send(body);

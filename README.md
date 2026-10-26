@@ -9,9 +9,10 @@ Web app self-hosted per biglietti da visita, QR e richieste di ricontatto. Un’
 - Schede pubbliche con foto o iniziali, nome, ruolo, telefono facoltativo, LinkedIn e siti.
 - CTA principale «Lascia i tuoi contatti»: email e/o telefono, conservati nel pannello e notificati tramite coda SMTP. Form messaggio senza mailto; email del titolare esclusa da HTML pubblico, QR e vCard.
 - Pannello amministratore/editor, assegnazione profili, bozze, pubblicazione esplicita, URL permanenti e sospensione.
-- QR pagina aggiornabile e QR contatto con vCard incorporata offline; PNG/SVG, due colori di scansione sicuri.
+- QR pagina aggiornabile e QR contatto con vCard incorporata offline; PNG/SVG, due colori di scansione sicuri e simbolo centrale facoltativo dalla configurazione privata del brand.
+- Pulsante «Mostra QR» a tutta larghezza e retro della scheda con flip anche su touch; un tap su uno spazio libero offre la stessa scorciatoia. Tastiera, movimento ridotto e modalità senza JavaScript restano disponibili.
 - Pulsante contatto con risposta vCard inline. Il sistema operativo decide se aprire la rubrica o scaricare: nessuna API web può garantire un salvataggio diretto universale. I QR contatto già distribuiti non si aggiornano né si revocano.
-- Temi, colori corretti per il contrasto, artwork QA, riflessi metallici casuali, profondità e griglia reattiva; touch e movimento ridotto disattivano il movimento.
+- Temi, colori corretti per il contrasto, artwork QA, riflessi metallici casuali, profondità e griglia reattiva; su touch il parallax è disattivato, con movimento ridotto anche il flip diventa immediato.
 - Login, TOTP obbligatorio per amministratori, sessioni MySQL, CSRF, limitazione tentativi, foto ricodificate senza metadati, retention e audit.
 
 ## Stack e avvio locale
@@ -32,6 +33,8 @@ npm start
 Il comando account mostra una password casuale: conservarla privatamente. Aprire `http://127.0.0.1:3600/admin`, associare Authenticator e creare/pubblicare i profili. In un secondo terminale eseguire `npm run worker` per SMTP e retention. Su Windows utilizzare `npm.cmd` se PowerShell blocca npm.ps1.
 
 La produzione usa un’utenza MySQL limitata a SELECT/INSERT/UPDATE/DELETE; l’installatore applica lo schema attraverso il socket amministrativo locale. L’origine pubblica HTTPS deve essere definitiva prima di stampare i QR.
+
+Il QR pagina contiene `PUBLIC_ORIGIN/c/ID_CASUALE`; l’immagine si richiede a `/c/ID_CASUALE/qr.png` oppure `.svg`. L’origine viene dalla configurazione del server, non dall’host inviato dal browser. Dopo una modifica di PUBLIC_ORIGIN e il riavvio, i nuovi QR usano il nuovo dominio; immagini già scaricate o stampate conservano quello precedente. Importare i profili in un database nuovo genera nuovi ID. Gli aggiornamenti nello stesso database mantengono i link.
 
 ## Deploy Ubuntu / Azure
 

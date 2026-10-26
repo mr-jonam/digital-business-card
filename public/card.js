@@ -8,6 +8,8 @@
   let frame = 0;
   let point = null;
   let rect = null;
+  let qrVisible = false;
+  let flipping = false;
   let foil = { angle: 0, separation: 100, second: 0, bend: 0 };
 
   function newFoil() {
@@ -23,7 +25,7 @@
     ['--rx', '--ry'].forEach(key => badge.style.removeProperty(key));
   }
   function motionAllowed() {
-    return toggle.checked && !reducedMotion.matches && finePointer.matches;
+    return toggle.checked && !reducedMotion.matches && finePointer.matches && !qrVisible && !flipping;
   }
   function syncMotion() {
     resetTilt();
@@ -68,6 +70,52 @@
   window.addEventListener('blur', resetTilt);
 
   document.body.classList.add('js-ready');
+  const front = document.getElementById('card-front');
+  const back = document.getElementById('card-back');
+  const qrButton = document.querySelector('[data-flip="back"]');
+  async function flip(show) {
+    if (!back || flipping || qrVisible === show || document.querySelector('dialog[open]')) return;
+    flipping = true;
+    resetTilt();
+    badge.classList.add('is-flipping');
+    if (show) back.style.minHeight = `${front.offsetHeight}px`;
+    const animate = !reducedMotion.matches && toggle.checked && typeof badge.animate === 'function';
+    try {
+      if (animate) await badge.animate([{ transform: 'rotateY(0deg)' }, { transform: 'rotateY(90deg)' }], { duration: 140, easing: 'ease-in' }).finished;
+      front.hidden = show;
+      back.hidden = !show;
+      qrVisible = show;
+      qrButton.setAttribute('aria-expanded', String(show));
+      badge.setAttribute('aria-labelledby', show ? 'qr-title' : 'person-name');
+      badge.classList.toggle('is-qr', show);
+      (show ? back.querySelector('h2') : qrButton).focus({ preventScroll: true });
+      if (animate) await badge.animate([{ transform: 'rotateY(-90deg)' }, { transform: 'rotateY(0deg)' }], { duration: 180, easing: 'ease-out' }).finished;
+    } finally {
+      flipping = false;
+      badge.classList.remove('is-flipping');
+    }
+  }
+  document.querySelectorAll('[data-flip]').forEach(button => button.addEventListener('click', () => flip(button.dataset.flip === 'back')));
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && qrVisible && !document.querySelector('dialog[open]')) { event.preventDefault(); flip(false); }
+  });
+  // A deliberate tap on free space is a shortcut; scrolling, selecting text and controls retain their behavior.
+  let tap = null;
+  const interactive = 'a,button,input,label,textarea,select,summary,img,[contenteditable="true"]';
+  badge.addEventListener('pointerdown', event => {
+    tap = event.button === 0 && !event.target.closest(interactive) ? { x: event.clientX, y: event.clientY, scroll: window.scrollY } : null;
+  });
+  badge.addEventListener('pointercancel', () => { tap = null; });
+  badge.addEventListener('click', event => {
+    const start = tap; tap = null;
+    if (!start || event.target.closest(interactive) || Math.hypot(event.clientX - start.x, event.clientY - start.y) > 8 || window.scrollY !== start.scroll || !window.getSelection().isCollapsed) return;
+    flip(!qrVisible);
+  });
+  document.querySelector('[data-qr-logo]')?.addEventListener('change', event => {
+    const image = back.querySelector('[data-qr-image]'), url = new URL(image.src);
+    url.searchParams.set('logo', event.target.checked ? '1' : '0');
+    image.src = url.href;
+  });
   const openers = new WeakMap();
   function open(dialog, opener) {
     const previous=document.querySelector('dialog[open]');

@@ -21,6 +21,7 @@
     <symbol id="i-contact" viewBox="0 0 24 24"><rect x="5" y="3" width="15" height="18" rx="3"/><path d="M3 7h4M3 12h4M3 17h4m5-1h4"/><circle cx="14" cy="10" r="2"/></symbol>
     <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
     <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
+    <symbol id="i-qr" viewBox="0 0 24 24"><path d="M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM15 15h3v3h3v3h-6zM12 3v3M12 9v3H3M12 15v6M18 12h3M21 15v3"/></symbol>
   </svg>
 <noscript><p class="noscript">I moduli sono disponibili dopo il biglietto.</p></noscript><% if (preview) { %><p class="preview-notice">Anteprima bozza · moduli disattivati. <a href="/admin/profiles/<%= profileId %>">Torna al pannello</a></p><% } %>
   <main class="workbench" id="main-content">
@@ -29,7 +30,7 @@
         <article class="badge" id="badge" data-appearance="<%= JSON.stringify(profile.appearance) %>" aria-labelledby="person-name">
           <div class="metal-rim" aria-hidden="true"><div class="rim-facets"></div><div class="rim-light"></div></div>
           <div class="badge-face" aria-hidden="true"></div>
-          <div class="badge-content">
+          <div class="badge-content" id="card-front">
             <div class="brand-row depth-brand">
               <% if (brand.logo) { %><img src="/brand/logo" alt="<%= brand.name %>" width="652" height="283" class="badge-logo"><% } else { %><span class="brand-name"><%= brand.name %></span><% } %>
               <label class="motion-control"><input type="checkbox" id="motion-toggle" checked aria-describedby="motion-state"><span>Effetti</span><span class="visually-hidden" id="motion-state" role="status">Attivi con il mouse</span></label>
@@ -51,12 +52,24 @@
 <a class="link-cta <%= link.kind==='linkedin' ? 'linkedin-cta' : 'expertise-cta' %>" href="<%= link.url %>" target="_blank" rel="noopener noreferrer external" data-external><span class="link-mark" aria-hidden="true"><%= link.kind==='linkedin' ? 'in' : String(index+1).padStart(2,'0') %></span><span class="link-copy"><strong><%= link.label %></strong><span><%= link.description || 'Apri il sito' %><span class="visually-hidden"> · nuova scheda</span></span></span><svg class="icon link-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
 <% }); %></nav><% } %>            <div class="secondary-actions depth-action">
               <button type="button" class="button button-secondary" data-dialog="contact-dialog" aria-haspopup="dialog"><svg class="icon" aria-hidden="true"><use href="#i-contact"/></svg>Aggiungi contatto</button>
+              <% if (!preview) { %><button type="button" class="button button-qr" data-flip="back" aria-controls="card-back" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="#i-qr"/></svg>Mostra QR<span aria-hidden="true">↻</span></button><p class="flip-hint">Oppure tocca uno spazio libero della scheda.</p><% } %>
             </div>
             <footer class="badge-footer depth-brand">
-              <button type="button" data-info="privacy" aria-haspopup="dialog">Informativa privacy</button><% if (!preview) { %><button type="button" data-dialog="qr-dialog">Mostra QR</button><% } %>
+              <button type="button" data-info="privacy" aria-haspopup="dialog">Informativa privacy</button>
               <% if (brand.mark) { %><img src="/brand/mark" alt="" width="283" height="283"><% } %>
             </footer>
           </div>
+          <% if (!preview) { %><section class="badge-content qr-back" id="card-back" aria-labelledby="qr-title" hidden>
+            <p class="qr-kicker">PORTA IL BIGLIETTO CON TE</p>
+            <h2 id="qr-title" tabindex="-1">Inquadra il QR</h2>
+            <p class="qr-person"><%= profile.first_name %> <%= profile.last_name %></p>
+            <img class="public-qr" data-qr-image src="/c/<%= publicId %>/qr.png" alt="QR con il link alla scheda di <%= profile.first_name %> <%= profile.last_name %>" width="300" height="300">
+            <p class="qr-instructions">Inquadralo con un altro telefono per aprire questa scheda.</p>
+            <% if (brand.mark) { %><label class="qr-logo-choice"><input type="checkbox" data-qr-logo checked>Simbolo al centro</label><% } %>
+            <button type="button" class="button button-primary" data-share-url="<%= cardUrl(publicId) %>">Condividi il link</button>
+            <p class="qr-feedback" role="status" id="share-status"></p>
+            <button type="button" class="button button-secondary" data-flip="front" aria-controls="card-front">← Torna al biglietto</button>
+          </section><% } %>
         </article>
       </div>
     </section>

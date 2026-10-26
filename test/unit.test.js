@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import sharp from 'sharp';
 import jsQR from 'jsqr';
 import { profile, inquiry, publicUrl, publishedSnapshot } from '../src/validation.js';
-import { vcard, qr } from '../src/contact.js';
+import { cardUrl, vcard, qr } from '../src/contact.js';
 import { equal, encrypt, decrypt } from '../src/security.js';
 import { loadConfig } from '../src/config.js';
 
@@ -32,6 +32,22 @@ test('Public snapshots and contact formats exclude private email; UTF-8 folding 
     assert.ok(!decoded.data.includes(fixture.recipient));
   }
 });
+test('Branded PNG and SVG QR retain their payload and follow the configured public origin',async()=>{
+  const snapshot=publishedSnapshot(profile(fixture),1);
+  const mark=await sharp(Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path fill="#be0030" d="M10 50 40 20 90 70 60 90Z"/></svg>')).png().toBuffer();
+  for(const origin of ['https://cards.example.org','https://business-cards.westeurope.cloudapp.azure.com']) {
+    const url=cardUrl({origin},'a'.repeat(32));
+    for(const mode of ['page','contact']) for(const format of ['png','svg']) {
+      const output=await qr({...snapshot,qr_ink:'petrol'},url,mode,format,mark);
+      const {data,info}=await sharp(Buffer.isBuffer(output)?output:Buffer.from(output)).resize(280,280).ensureAlpha().raw().toBuffer({resolveWithObject:true});
+      const decoded=jsQR(new Uint8ClampedArray(data),info.width,info.height);
+      assert.ok(decoded,`Branded ${format} ${mode} decoded at phone size`);
+      assert.ok(mode==='page'?decoded.data===url:decoded.data.replace(/\r\n /g,'').includes(url));
+      assert.ok(!decoded.data.includes(fixture.recipient));
+    }
+  }
+});
+
 test('Validation rejects unsafe links, header injection and empty callback',()=>{
   for(const value of ['javascript:alert(1)','http://example.org','https://localhost','https://127.0.0.1','https://user:pass@example.org','https://example.org:123']) assert.throws(()=>publicUrl(value));
   assert.throws(()=>profile({...fixture,recipient:'x@example.org\r\nBcc:attacker@example.org'}));

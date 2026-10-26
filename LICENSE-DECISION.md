@@ -11,6 +11,7 @@ Revisione corrente: 26 ottobre 2026, MVP implementato. La decisione iniziale del
 - Audit npm sulle dipendenze di produzione del 26 ottobre 2026: nessuna vulnerabilità nota segnalata. Non è una garanzia per il futuro.
 - Nessun nuovo contributore esterno o materiale contrattuale inserito. La titolarità contrattuale dei materiali forniti dall’utente rimane fuori dalla concessione del progetto neutro.
 - Manifest iniziale preservato. Nuovo record con hash dei file e licenza, UUID/token separati; firma digitale e busta identità restano non configurate perché mancano chiavi controllate dall’utente. Nessun identificativo privato o segreto nel registro pubblico.
+- Revisione dell’aggiornamento QR/flip del 26 ottobre 2026: nessuna nuova dipendenza o sorgente di terzi. Il simbolo centrale viene dal brand privato esterno e non viene incorporato nei sorgenti neutri. Codice e test generici restano Apache-2.0; gli avvisi delle dipendenze già censite restano applicabili.
 
 ## Registro iniziale
 
