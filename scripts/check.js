@@ -9,4 +9,4 @@ for (const folder of ['src','scripts','public','test']) {
   }
 }
 for (const name of await readdir('views')) if(name.endsWith('.ejs')) ejs.compile(await readFile(`views/${name}`,'utf8'),{filename:`views/${name}`});
-console.log('Syntax JavaScript e template EJS verificati.');
+console.log('JavaScript syntax and EJS templates verified.');

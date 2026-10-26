@@ -17,10 +17,10 @@ const { values } = parseArgs({ args, options: {
 try {
   if (command === 'migrate') {
     await migrate(pool);
-    console.log('Schema iniziale verificato.');
+    console.log('Initial schema verified.');
   } else if (command === 'user:add' || command === 'user:reset') {
     const address = email(values.email, true).toLowerCase();
-    if (!['admin','editor'].includes(values.role)) throw new Error('Ruolo: admin oppure editor.');
+    if (!['admin','editor'].includes(values.role)) throw new Error('Role: admin or editor.');
     const generated = !values['password-file'];
     const password = generated ? randomBytes(24).toString('base64url') : (await readFile(values['password-file'], 'utf8')).replace(/\r?\n$/, '');
     checkPassword(password);
@@ -32,20 +32,20 @@ try {
         await audit(connection, null, 'cli.user-create', id);
       } else {
         const [[user]] = await connection.execute('SELECT id FROM users WHERE email=? FOR UPDATE', [address]);
-        if (!user) throw new Error('Utente non trovato.');
+        if (!user) throw new Error('User not found.');
         await connection.execute(`UPDATE users SET password_hash=?,active=1${values['reset-totp'] ? ',totp_secret=NULL,totp_counter=NULL' : ''} WHERE id=?`, [hash, user.id]);
         await connection.execute('DELETE FROM web_sessions WHERE user_id=?', [user.id]);
         await audit(connection, null, 'cli.user-reset', user.id);
       }
     });
-    console.log('Utenza aggiornata.');
-    if (generated) console.log(`Password iniziale (conservare in un password manager): ${password}`);
+    console.log('Account updated.');
+    if (generated) console.log(`Initial password (store in a password manager): ${password}`);
   } else if (command === 'import') {
-    if (!values.file) throw new Error('Specificare --file /percorso/profiles.json');
+    if (!values.file) throw new Error('Specify --file /path/to/profiles.json');
     const profiles = JSON.parse(await readFile(values.file, 'utf8'));
-    if (!Array.isArray(profiles) || profiles.length > 100) throw new Error('Il file deve essere un array di massimo 100 profili.');
+    if (!Array.isArray(profiles) || profiles.length > 100) throw new Error('The file must be an array of up to 100 profiles.');
     const [[actor]] = await pool.execute("SELECT id,role FROM users WHERE role='admin' AND active=1 ORDER BY created_at LIMIT 1");
-    if (!actor) throw new Error('Creare prima un amministratore.');
+    if (!actor) throw new Error('Create an administrator first.');
     let created = 0, updated = 0, skipped = 0;
     for (const input of profiles) {
       const recipient = email(input.recipient, true);
@@ -55,11 +55,11 @@ try {
         else skipped++;
       } else { await createProfile(pool, input, actor); created++; }
     }
-    console.log(`Importazione: ${created} creati, ${updated} aggiornati, ${skipped} già presenti. Profili in bozza: pubblicarli dal pannello.`);
+    console.log(`Import: ${created} created, ${updated} updated, ${skipped} already present. Profiles are drafts: publish them from the dashboard.`);
   } else if (command === 'purge') {
-    console.log(`Richieste eliminate per scadenza: ${await purge(pool, config.privacy.retention)}.`);
-  } else throw new Error('Comandi: migrate, user:add, user:reset, import, purge.');
+    console.log(`Expired requests deleted: ${await purge(pool, config.privacy.retention)}.`);
+  } else throw new Error('Commands: migrate, user:add, user:reset, import, purge.');
 } catch (error) {
-  console.error(error.code ? `Operazione fallita (${error.code}). Controllare configurazione e permessi.` : error.message);
+  console.error(error.code ? `Operation failed (${error.code}). Check configuration and permissions.` : error.message);
   process.exitCode = 1;
 } finally { await pool.end(); }

@@ -1,11 +1,11 @@
 <%- include('partials/head') %>
-<section class="panel narrow"><p class="eyebrow">AREA RISERVATA</p><h1>Accedi</h1>
+<section class="panel narrow"><p class="eyebrow">PRIVATE AREA</p><h1>Sign in</h1>
 <form method="post" action="/admin/login" class="stack">
   <input type="hidden" name="_csrf" value="<%= csrf %>">
   <label>Email<input name="email" type="email" autocomplete="username" required maxlength="254"></label>
   <label>Password<input name="password" type="password" autocomplete="current-password" required maxlength="72"></label>
-  <label>Codice di verifica <span>(se già attivato)</span><input name="otp" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" aria-describedby="otp-hint"></label>
-  <p id="otp-hint" class="hint">Usa il codice della tua app Authenticator. Al primo accesso ti guideremo nell’attivazione.</p>
-  <button class="button" type="submit">Accedi</button>
+  <label>Verification code <span>(if enabled)</span><input name="otp" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" aria-describedby="otp-hint"></label>
+  <p id="otp-hint" class="hint">Enter the code from your authenticator app. We will guide you through setup when you first sign in.</p>
+  <button class="button" type="submit">Sign in</button>
 </form></section>
 <%- include('partials/foot') %>

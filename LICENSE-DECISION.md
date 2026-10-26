@@ -56,3 +56,8 @@ Firma digitale e busta identità cifrata sono **non configurate**: richiedono un
 6. Configurare firma/busta cifrata con le chiavi fornite dall'utente, oppure dichiararne l'assenza.
 
 Fonti: https://www.apache.org/licenses/LICENSE-2.0 ; https://docs.github.com/en/site-policy/github-terms/github-terms-of-service
+
+
+## English interface revision (2026-10-26)
+
+The application interface, accessibility labels, operational messages and notification emails now use English. This revision only translates original project text and adds language assertions to the existing tests. No dependencies, third-party assets or private profile data are added to the public repository. The existing Apache-2.0 decision and third-party notices remain applicable. The original provenance records are retained; `.provenance/release-0.1.0-english-interface.json` records the source snapshot. No signing or encryption keys are configured.

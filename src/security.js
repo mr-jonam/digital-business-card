@@ -13,7 +13,7 @@ export function equal(a, b) {
 export const passwordHash = password => bcrypt.hash(password, 12);
 export const passwordMatches = (password, hash) => bcrypt.compare(password, hash);
 export function checkPassword(password) {
-  if (typeof password !== 'string' || password.length < 14 || Buffer.byteLength(password) > 72) throw new InputError('Password: almeno 14 caratteri, massimo 72 byte.');
+  if (typeof password !== 'string' || password.length < 14 || Buffer.byteLength(password) > 72) throw new InputError('Password: at least 14 characters, maximum 72 bytes.');
   return password;
 }
 
@@ -56,7 +56,7 @@ export function csrf(req, res, next) {
   if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) return next();
   const origin = req.get('origin');
   if (origin && origin !== res.locals.config.origin || !equal(req.body?._csrf || req.get('x-csrf-token'), req.session.csrf)) {
-    return res.status(403).render('error', { title: 'Sessione non valida', message: 'Ricarica la pagina e riprova.' });
+    return res.status(403).render('error', { title: 'Invalid session', message: 'Reload the page and try again.' });
   }
   next();
 }

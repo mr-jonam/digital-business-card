@@ -12,7 +12,7 @@ export const fixture={first_name:'Alex',last_name:'Example',title:'Quality Engin
 test('Partial SMTP configuration fails instead of silently disabling delivery',()=>{
   const base={DATABASE_URL:'mysql://localhost/example',SESSION_SECRET:'x'.repeat(64)};
   assert.equal(loadConfig(base).smtp,null);
-  assert.throws(()=>loadConfig({...base,SMTP_HOST:'smtp.example.org'}),/SMTP incompleto/);
+  assert.throws(()=>loadConfig({...base,SMTP_HOST:'smtp.example.org'}),/Incomplete SMTP configuration/);
   assert.throws(()=>loadConfig({...base,SMTP_PORT:'bad'}),/SMTP_PORT/);
 });
 test('Public snapshots and contact formats exclude private email; UTF-8 folding remains valid',async()=>{

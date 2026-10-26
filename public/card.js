@@ -32,7 +32,7 @@
     const allowed = motionAllowed();
     document.body.classList.toggle('motion-off', !allowed);
     document.dispatchEvent(new CustomEvent('card-motion-change', { detail: { allowed } }));
-    motionState.textContent = allowed ? 'Attivi con il mouse' : reducedMotion.matches ? 'Movimento ridotto rispettato' : !finePointer.matches ? 'Statici su questo dispositivo' : 'Disattivati';
+    motionState.textContent = allowed ? 'Enabled with mouse' : reducedMotion.matches ? 'Reduced motion enabled' : !finePointer.matches ? 'Static on this device' : 'Disabled';
   }
   toggle.addEventListener('change', syncMotion);
   reducedMotion.addEventListener('change', syncMotion);
@@ -128,18 +128,18 @@
   document.querySelectorAll('dialog').forEach(d=>d.addEventListener('close',()=>{ if(!document.querySelector('dialog[open]')) openers.get(d)?.focus(); }));
   document.querySelectorAll('[data-inquiry]').forEach(form=>form.addEventListener('submit',e=>{
     const email=form.elements.email,phone=form.elements.phone;
-    if(phone&&!email.value.trim()&&!phone.value.trim()){ e.preventDefault(); form.querySelector('[role=status]').textContent='Inserisci almeno un recapito: email o telefono.'; email.focus(); return; }
-    form.querySelector('button[type=submit]').disabled=true; form.querySelector('[role=status]').textContent='Invio in corso…';
+    if(phone&&!email.value.trim()&&!phone.value.trim()){ e.preventDefault(); form.querySelector('[role=status]').textContent='Enter an email address or phone number.'; email.focus(); return; }
+    form.querySelector('button[type=submit]').disabled=true; form.querySelector('[role=status]').textContent='Sending…';
   }));
   document.getElementById('copy-contact')?.addEventListener('click',async()=>{
     const field=document.getElementById('contact-data');
-    try { await navigator.clipboard.writeText(field.value); document.getElementById('copy-status').textContent='Dati copiati.'; }
+    try { await navigator.clipboard.writeText(field.value); document.getElementById('copy-status').textContent='Details copied.'; }
     catch{document.getElementById('copy-fallback').hidden=false;field.focus();field.select();}
   });
   document.querySelector('[data-share-url]')?.addEventListener('click',async e=>{
     const url=e.currentTarget.dataset.shareUrl;
-    try{ if(navigator.share) await navigator.share({title:document.title,url}); else {await navigator.clipboard.writeText(url);document.getElementById('share-status').textContent='Link copiato.';} }
-    catch(error){if(error.name!=='AbortError')document.getElementById('share-status').textContent='Copia il link dalla barra del browser.';}
+    try{ if(navigator.share) await navigator.share({title:document.title,url}); else {await navigator.clipboard.writeText(url);document.getElementById('share-status').textContent='Link copied.';} }
+    catch(error){if(error.name!=='AbortError')document.getElementById('share-status').textContent='Copy the link from your browser’s address bar.';}
   });
   document.querySelectorAll('[data-external]').forEach(a=>a.addEventListener('click',()=>document.querySelector('[data-dialog="callback-dialog"]')?.classList.add('attention')));
 })();

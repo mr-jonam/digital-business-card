@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="it">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,7 +13,7 @@
 </head>
 <body data-art="qa-platforms" data-finish="holo" data-backdrop="qa-grid">
   <div class="ambient-grid" aria-hidden="true"><canvas></canvas></div>
-  <a class="skip-link" href="#person-name">Vai al biglietto da visita</a>
+  <a class="skip-link" href="#person-name">Skip to business card</a>
   <svg class="icon-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></symbol>
     <symbol id="i-phone" viewBox="0 0 24 24"><path d="m7 3 3 5-2 2a14 14 0 0 0 6 6l2-2 5 3-1 4C10 22 2 14 3 4Z"/></symbol>
@@ -23,9 +23,9 @@
     <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
     <symbol id="i-qr" viewBox="0 0 24 24"><path d="M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM15 15h3v3h3v3h-6zM12 3v3M12 9v3H3M12 15v6M18 12h3M21 15v3"/></symbol>
   </svg>
-<noscript><p class="noscript">I moduli sono disponibili dopo il biglietto.</p></noscript><% if (preview) { %><p class="preview-notice">Anteprima bozza · moduli disattivati. <a href="/admin/profiles/<%= profileId %>">Torna al pannello</a></p><% } %>
+<noscript><p class="noscript">Contact forms are available below the card.</p></noscript><% if (preview) { %><p class="preview-notice">Draft preview · forms disabled. <a href="/admin/profiles/<%= profileId %>">Back to dashboard</a></p><% } %>
   <main class="workbench" id="main-content">
-    <section class="stage" aria-label="Biglietto da visita">
+    <section class="stage" aria-label="Business card">
       <div class="scene">
         <article class="badge" id="badge" data-appearance="<%= JSON.stringify(profile.appearance) %>" aria-labelledby="person-name">
           <div class="metal-rim" aria-hidden="true"><div class="rim-facets"></div><div class="rim-light"></div></div>
@@ -33,7 +33,7 @@
           <div class="badge-content" id="card-front">
             <div class="brand-row depth-brand">
               <% if (brand.logo) { %><img src="/brand/logo" alt="<%= brand.name %>" width="652" height="283" class="badge-logo"><% } else { %><span class="brand-name"><%= brand.name %></span><% } %>
-              <label class="motion-control"><input type="checkbox" id="motion-toggle" checked aria-describedby="motion-state"><span>Effetti</span><span class="visually-hidden" id="motion-state" role="status">Attivi con il mouse</span></label>
+              <label class="motion-control"><input type="checkbox" id="motion-toggle" checked aria-describedby="motion-state"><span>Effects</span><span class="visually-hidden" id="motion-state" role="status">Enabled with mouse</span></label>
             </div>
             <div class="identity">
               <div class="portrait" aria-hidden="true"><% if (profile.photo) { %><img src="<%= preview ? `/admin/profiles/${profileId}/photo` : `/c/${publicId}/photo` %>" alt="" width="96" height="96"><% } else { %><span><%= profile.first_name[0] %><%= profile.last_name[0] %></span><% } %></div>
@@ -43,32 +43,32 @@
               </div>
             </div>
             <div class="main-action depth-action">
-              <button type="button" class="button button-primary" <%= preview || !config.formsEnabled ? "disabled" : "" %> data-dialog="callback-dialog" aria-haspopup="dialog" aria-describedby="callback-hint"><svg class="icon" aria-hidden="true"><use href="#i-contact"/></svg>Lascia i tuoi contatti</button>
-              <p class="action-hint" id="callback-hint"><%= config.formsEnabled && !preview ? "Email o telefono: ne basta uno per ricontattarti." : "Ricezione delle richieste disattivata in questa modalità." %></p>
-              <button type="button" class="button button-secondary" <%= preview || !config.formsEnabled ? "disabled" : "" %> data-dialog="message-dialog" aria-haspopup="dialog"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>Scrivi un messaggio</button>
+              <button type="button" class="button button-primary" <%= preview || !config.formsEnabled ? "disabled" : "" %> data-dialog="callback-dialog" aria-haspopup="dialog" aria-describedby="callback-hint"><svg class="icon" aria-hidden="true"><use href="#i-contact"/></svg>Leave your details</button>
+              <p class="action-hint" id="callback-hint"><%= config.formsEnabled && !preview ? "An email address or phone number is all we need to get back to you." : "Contact requests are disabled in this mode." %></p>
+              <button type="button" class="button button-secondary" <%= preview || !config.formsEnabled ? "disabled" : "" %> data-dialog="message-dialog" aria-haspopup="dialog"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>Send a message</button>
             </div>
-<% if (profile.phone) { %><a class="link-cta depth-action" href="tel:<%= profile.phone %>"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg><span class="link-copy"><strong>Chiama</strong><span><%= profile.phone %></span></span></a><% } %>
-<% if (profile.links.length) { %><nav class="expertise depth-identity" aria-label="Link del profilo"><% profile.links.forEach((link,index)=>{ %>
-<a class="link-cta <%= link.kind==='linkedin' ? 'linkedin-cta' : 'expertise-cta' %>" href="<%= link.url %>" target="_blank" rel="noopener noreferrer external" data-external><span class="link-mark" aria-hidden="true"><%= link.kind==='linkedin' ? 'in' : String(index+1).padStart(2,'0') %></span><span class="link-copy"><strong><%= link.label %></strong><span><%= link.description || 'Apri il sito' %><span class="visually-hidden"> · nuova scheda</span></span></span><svg class="icon link-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+<% if (profile.phone) { %><a class="link-cta depth-action" href="tel:<%= profile.phone %>"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg><span class="link-copy"><strong>Call</strong><span><%= profile.phone %></span></span></a><% } %>
+<% if (profile.links.length) { %><nav class="expertise depth-identity" aria-label="Profile links"><% profile.links.forEach((link,index)=>{ %>
+<a class="link-cta <%= link.kind==='linkedin' ? 'linkedin-cta' : 'expertise-cta' %>" href="<%= link.url %>" target="_blank" rel="noopener noreferrer external" data-external><span class="link-mark" aria-hidden="true"><%= link.kind==='linkedin' ? 'in' : String(index+1).padStart(2,'0') %></span><span class="link-copy"><strong><%= link.label %></strong><span><%= link.description || 'Visit website' %><span class="visually-hidden"> · new tab</span></span></span><svg class="icon link-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
 <% }); %></nav><% } %>            <div class="secondary-actions depth-action">
-              <button type="button" class="button button-secondary" data-dialog="contact-dialog" aria-haspopup="dialog"><svg class="icon" aria-hidden="true"><use href="#i-contact"/></svg>Aggiungi contatto</button>
-              <% if (!preview) { %><button type="button" class="button button-qr" data-flip="back" aria-controls="card-back" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="#i-qr"/></svg>Mostra QR<span aria-hidden="true">↻</span></button><p class="flip-hint">Oppure tocca uno spazio libero della scheda.</p><% } %>
+              <button type="button" class="button button-secondary" data-dialog="contact-dialog" aria-haspopup="dialog"><svg class="icon" aria-hidden="true"><use href="#i-contact"/></svg>Add contact</button>
+              <% if (!preview) { %><button type="button" class="button button-qr" data-flip="back" aria-controls="card-back" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="#i-qr"/></svg>Show QR<span aria-hidden="true">↻</span></button><p class="flip-hint">Or tap an empty area of the card.</p><% } %>
             </div>
             <footer class="badge-footer depth-brand">
-              <button type="button" data-info="privacy" aria-haspopup="dialog">Informativa privacy</button>
+              <button type="button" data-info="privacy" aria-haspopup="dialog">Privacy notice</button>
               <% if (brand.mark) { %><img src="/brand/mark" alt="" width="283" height="283"><% } %>
             </footer>
           </div>
           <% if (!preview) { %><section class="badge-content qr-back" id="card-back" aria-labelledby="qr-title" hidden>
-            <p class="qr-kicker">PORTA IL BIGLIETTO CON TE</p>
-            <h2 id="qr-title" tabindex="-1">Inquadra il QR</h2>
+            <p class="qr-kicker">TAKE THE CARD WITH YOU</p>
+            <h2 id="qr-title" tabindex="-1">Scan the QR code</h2>
             <p class="qr-person"><%= profile.first_name %> <%= profile.last_name %></p>
-            <img class="public-qr" data-qr-image src="/c/<%= publicId %>/qr.png" alt="QR con il link alla scheda di <%= profile.first_name %> <%= profile.last_name %>" width="300" height="300">
-            <p class="qr-instructions">Inquadralo con un altro telefono per aprire questa scheda.</p>
-            <% if (brand.mark) { %><label class="qr-logo-choice"><input type="checkbox" data-qr-logo checked>Simbolo al centro</label><% } %>
-            <button type="button" class="button button-primary" data-share-url="<%= cardUrl(publicId) %>">Condividi il link</button>
+            <img class="public-qr" data-qr-image src="/c/<%= publicId %>/qr.png" alt="QR code linking to the card for <%= profile.first_name %> <%= profile.last_name %>" width="300" height="300">
+            <p class="qr-instructions">Scan with another phone to open this card.</p>
+            <% if (brand.mark) { %><label class="qr-logo-choice"><input type="checkbox" data-qr-logo checked>Center logo</label><% } %>
+            <button type="button" class="button button-primary" data-share-url="<%= cardUrl(publicId) %>">Share link</button>
             <p class="qr-feedback" role="status" id="share-status"></p>
-            <button type="button" class="button button-secondary" data-flip="front" aria-controls="card-front">← Torna al biglietto</button>
+            <button type="button" class="button button-secondary" data-flip="front" aria-controls="card-front">← Back to card</button>
           </section><% } %>
         </article>
       </div>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="it">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,12 +10,12 @@
   <script src="/assets/admin.js" defer></script>
 </head>
 <body>
-<a class="skip-link" href="#content">Vai al contenuto</a>
+<a class="skip-link" href="#content">Skip to content</a>
 <header class="app-header">
   <a class="brand" href="/admin"><%= brand.name %> <span>Digital Card</span></a>
   <% if (typeof user !== 'undefined' && user) { %>
-  <nav aria-label="Gestione"><a href="/admin">Biglietti</a><a href="/admin/inquiries">Richieste</a><a href="/admin/security">Sicurezza</a></nav>
-  <form method="post" action="/admin/logout"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="button small secondary" type="submit">Esci</button></form>
+  <nav aria-label="Administration"><a href="/admin">Cards</a><a href="/admin/inquiries">Requests</a><a href="/admin/security">Security</a></nav>
+  <form method="post" action="/admin/logout"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="button small secondary" type="submit">Sign out</button></form>
   <% } %>
 </header>
 <main id="content" class="app-content">

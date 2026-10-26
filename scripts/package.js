@@ -16,7 +16,7 @@ for (const name of ['src','views','public','migrations','deploy','package.json',
 const {fileURLToPath}=await import('node:url');
 const archive=fileURLToPath(new URL('digital-card-app.tar.gz',output));
 const result=spawnSync('tar',['-czf',archive,'-C',fileURLToPath(staging),'.'],{stdio:'inherit'});
-if(result.status!==0)throw new Error('tar non disponibile: caricare il contenuto della cartella dist/digital-card-app-* con WinSCP.');
+if(result.status!==0)throw new Error('tar is unavailable: upload the contents of dist/digital-card-app-* with WinSCP.');
 const hash=createHash('sha256').update(await readFile(archive)).digest('hex');
 await writeFile(archive+'.sha256',`${hash}  digital-card-app.tar.gz\n`);
-console.log(`Pacchetto pronto: ${archive}\nSHA-256: ${hash}`);
+console.log(`Package ready: ${archive}\nSHA-256: ${hash}`);

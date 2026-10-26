@@ -1,41 +1,41 @@
 <%- include('partials/head') %>
-<p><a href="/admin">← Biglietti</a></p><h1><%= title %></h1>
+<p><a href="/admin">← Cards</a></p><h1><%= title %></h1>
 <% if (row) { %>
-<section class="panel"><p>Stato: <strong><%= {draft:'Bozza',published:'Pubblicato',suspended:'Sospeso'}[row.status] %></strong> · Revisione pubblica <%= row.revision %></p>
-<div class="actions"><a class="button secondary" href="/admin/profiles/<%= row.id %>/preview">Anteprima bozza</a>
-<form method="post" action="/admin/profiles/<%= row.id %>/publish"><input type="hidden" name="_csrf" value="<%= csrf %>"><input type="hidden" name="version" value="<%= row.version %>"><button type="submit" class="button">Pubblica la bozza salvata</button></form>
-<% if (row.status === 'published') { %><a class="button secondary" href="/admin/profiles/<%= row.id %>/share">QR e condivisione</a><a class="button secondary" href="/c/<%= row.public_id %>">Apri biglietto pubblico</a>
-<% if (user.role === 'admin') { %><form method="post" action="/admin/profiles/<%= row.id %>/suspend" data-confirm="Sospendere la scheda e le sue esportazioni pubbliche?"><input type="hidden" name="_csrf" value="<%= csrf %>"><button type="submit" class="button danger">Sospendi</button></form><% } } %></div>
-<p class="hint">Salva le modifiche prima di pubblicare. L’URL e il QR della pagina rimangono gli stessi. Le copie del QR contatto conservano i dati del momento.</p></section>
+<section class="panel"><p>Status: <strong><%= {draft:'Draft',published:'Published',suspended:'Suspended'}[row.status] %></strong> · Public revision <%= row.revision %></p>
+<div class="actions"><a class="button secondary" href="/admin/profiles/<%= row.id %>/preview">Draft preview</a>
+<form method="post" action="/admin/profiles/<%= row.id %>/publish"><input type="hidden" name="_csrf" value="<%= csrf %>"><input type="hidden" name="version" value="<%= row.version %>"><button type="submit" class="button">Publish saved draft</button></form>
+<% if (row.status === 'published') { %><a class="button secondary" href="/admin/profiles/<%= row.id %>/share">QR and sharing</a><a class="button secondary" href="/c/<%= row.public_id %>">Open public card</a>
+<% if (user.role === 'admin') { %><form method="post" action="/admin/profiles/<%= row.id %>/suspend" data-confirm="Suspend this card and its public exports?"><input type="hidden" name="_csrf" value="<%= csrf %>"><button type="submit" class="button danger">Suspend</button></form><% } } %></div>
+<p class="hint">Save your changes before publishing. The page URL and QR code stay the same. Copies of the contact QR code keep the data from when they were created.</p></section>
 <% } %>
 <form method="post" action="<%= row ? '/admin/profiles/'+row.id : '/admin/profiles' %>" class="panel stack" id="profile-form">
 <input type="hidden" name="_csrf" value="<%= csrf %>"><input type="hidden" name="version" value="<%= row?.version || 0 %>">
-<fieldset><legend>Identità</legend><div class="form-grid">
-<label>Nome<input name="first_name" value="<%= profile.first_name || '' %>" maxlength="80" autocomplete="given-name" required></label>
-<label>Cognome<input name="last_name" value="<%= profile.last_name || '' %>" maxlength="80" autocomplete="family-name" required></label>
-<label class="wide">Titolo professionale<input name="title" value="<%= profile.title || '' %>" maxlength="120" required></label>
-<label>Organizzazione<input name="company" value="<%= profile.company || '' %>" maxlength="120"></label>
-<label>Telefono pubblico <span>(facoltativo)</span><input name="phone" type="tel" value="<%= profile.phone || '' %>" maxlength="40" aria-describedby="phone-hint"></label>
-<p class="hint wide" id="phone-hint">Includi il prefisso internazionale, per esempio +39. Il numero sarà visibile sul biglietto e nel contatto.</p>
-<label class="wide">Email riservata per ricevere le notifiche<input name="recipient" type="email" value="<%= profile.recipient || '' %>" maxlength="254" required aria-describedby="recipient-hint"></label>
-<p class="hint wide" id="recipient-hint">Non viene inclusa nella pagina pubblica, nella vCard o nel QR. I messaggi vengono inviati dal server.</p>
-<% if (user.role === 'admin') { %><label class="wide">Editor assegnato<select name="owner_id"><option value="">Solo amministratori</option><% users.forEach(account => { %><option value="<%= account.id %>" <%= row?.owner_id === account.id ? 'selected' : '' %>><%= account.email %> (<%= account.role %>)</option><% }) %></select></label><% } %>
+<fieldset><legend>Identity</legend><div class="form-grid">
+<label>First name<input name="first_name" value="<%= profile.first_name || '' %>" maxlength="80" autocomplete="given-name" required></label>
+<label>Last name<input name="last_name" value="<%= profile.last_name || '' %>" maxlength="80" autocomplete="family-name" required></label>
+<label class="wide">Job title<input name="title" value="<%= profile.title || '' %>" maxlength="120" required></label>
+<label>Organization<input name="company" value="<%= profile.company || '' %>" maxlength="120"></label>
+<label>Public phone number <span>(optional)</span><input name="phone" type="tel" value="<%= profile.phone || '' %>" maxlength="40" aria-describedby="phone-hint"></label>
+<p class="hint wide" id="phone-hint">Include the country code, for example +39. This number will be visible on the card and in the contact.</p>
+<label class="wide">Private email for notifications<input name="recipient" type="email" value="<%= profile.recipient || '' %>" maxlength="254" required aria-describedby="recipient-hint"></label>
+<p class="hint wide" id="recipient-hint">Excluded from the public page, vCard and QR code. Messages are sent by the server.</p>
+<% if (user.role === 'admin') { %><label class="wide">Assigned editor<select name="owner_id"><option value="">Administrators only</option><% users.forEach(account => { %><option value="<%= account.id %>" <%= row?.owner_id === account.id ? 'selected' : '' %>><%= account.email %> (<%= account.role %>)</option><% }) %></select></label><% } %>
 </div></fieldset>
-<fieldset><legend>LinkedIn e siti</legend><p class="hint">Fino a 12 link HTTPS. Titolo e descrizione diventano pulsanti sul biglietto.</p>
+<fieldset><legend>LinkedIn and websites</legend><p class="hint">Up to 12 HTTPS links. Labels and descriptions appear on the card’s buttons.</p>
 <div id="links-list"><% const links = profile.links?.length ? profile.links : [{label:'',url:'',description:'',kind:'site'}]; links.forEach((link, i) => { %><div class="link-row">
-<label>Titolo<input name="link_label" value="<%= link.label %>" maxlength="80"></label><label>Descrizione<input name="link_description" value="<%= link.description || '' %>" maxlength="100"></label><label>URL HTTPS<input name="link_url" value="<%= link.url %>" type="url" maxlength="2048"></label><label>Tipo<select name="link_kind"><option value="site">Sito web</option><option value="linkedin" <%= link.kind === 'linkedin' ? 'selected' : '' %>>LinkedIn</option></select></label><button type="button" class="button secondary small" data-remove-link>Rimuovi link</button></div><% }) %></div><button type="button" class="button secondary small" id="add-link">Aggiungi link</button>
+<label>Label<input name="link_label" value="<%= link.label %>" maxlength="80"></label><label>Description<input name="link_description" value="<%= link.description || '' %>" maxlength="100"></label><label>HTTPS URL<input name="link_url" value="<%= link.url %>" type="url" maxlength="2048"></label><label>Type<select name="link_kind"><option value="site">Website</option><option value="linkedin" <%= link.kind === 'linkedin' ? 'selected' : '' %>>LinkedIn</option></select></label><button type="button" class="button secondary small" data-remove-link>Remove link</button></div><% }) %></div><button type="button" class="button secondary small" id="add-link">Add link</button>
 </fieldset>
-<fieldset><legend>Aspetto del biglietto</legend><div class="form-grid">
-<label>Tema<select name="theme"><% [['graphite','Grafite'],['petrol','Petrolio'],['midnight','Mezzanotte'],['forest','Foresta']].forEach(([value,label]) => { %><option value="<%= value %>" <%= profile.appearance?.theme === value ? 'selected' : '' %>><%= label %></option><% }) %></select></label>
-<label>Disegno QA<select name="art"><% [['qa-platforms','Piattaforme digitali'],['qa-flow','Flusso di test'],['coverage','Copertura'],['none','Nessuno']].forEach(([value,label]) => { %><option value="<%= value %>" <%= profile.appearance?.art === value ? 'selected' : '' %>><%= label %></option><% }) %></select></label>
-<label>Finitura<select name="finish"><% [['holo','Olografica'],['spotlight','Riflesso morbido'],['plain','Senza riflessi']].forEach(([value,label]) => { %><option value="<%= value %>" <%= profile.appearance?.finish === value ? 'selected' : '' %>><%= label %></option><% }) %></select></label>
-<label>Sfondo pagina<select name="backdrop"><% [['qa-grid','Griglia QA'],['grid','Griglia semplice'],['plain','Uniforme']].forEach(([value,label]) => { %><option value="<%= value %>" <%= profile.appearance?.backdrop === value ? 'selected' : '' %>><%= label %></option><% }) %></select></label>
-<label>Colore superficie <span>(facoltativo)</span><input name="surface" value="<%= profile.appearance?.surface || '' %>" pattern="#[0-9a-fA-F]{6}" maxlength="7" placeholder="#191e24"></label>
-<label>Colore accento <span>(facoltativo)</span><input name="accent" value="<%= profile.appearance?.accent || '' %>" pattern="#[0-9a-fA-F]{6}" maxlength="7" placeholder="#df0030"></label>
-<label>Colore QR<select name="qr_ink"><option value="black">Nero su bianco</option><option value="petrol" <%= profile.qr_ink === 'petrol' ? 'selected' : '' %>>Petrolio su bianco</option></select></label>
-</div><p class="hint">Il sistema scurisce automaticamente i colori che ridurrebbero la leggibilità. Il QR mantiene contrasto e margine di scansione.</p></fieldset>
-<button type="submit" class="button"><%= row ? 'Salva bozza' : 'Crea bozza' %></button></form>
+<fieldset><legend>Card appearance</legend><div class="form-grid">
+<label>Theme<select name="theme"><% [['graphite','Graphite'],['petrol','Petrol'],['midnight','Midnight'],['forest','Forest']].forEach(([value,label]) => { %><option value="<%= value %>" <%= profile.appearance?.theme === value ? 'selected' : '' %>><%= label %></option><% }) %></select></label>
+<label>QA artwork<select name="art"><% [['qa-platforms','Digital platforms'],['qa-flow','Test flow'],['coverage','Coverage'],['none','None']].forEach(([value,label]) => { %><option value="<%= value %>" <%= profile.appearance?.art === value ? 'selected' : '' %>><%= label %></option><% }) %></select></label>
+<label>Finish<select name="finish"><% [['holo','Holographic'],['spotlight','Soft glare'],['plain','No glare']].forEach(([value,label]) => { %><option value="<%= value %>" <%= profile.appearance?.finish === value ? 'selected' : '' %>><%= label %></option><% }) %></select></label>
+<label>Page background<select name="backdrop"><% [['qa-grid','QA grid'],['grid','Simple grid'],['plain','Solid']].forEach(([value,label]) => { %><option value="<%= value %>" <%= profile.appearance?.backdrop === value ? 'selected' : '' %>><%= label %></option><% }) %></select></label>
+<label>Surface color <span>(optional)</span><input name="surface" value="<%= profile.appearance?.surface || '' %>" pattern="#[0-9a-fA-F]{6}" maxlength="7" placeholder="#191e24"></label>
+<label>Accent color <span>(optional)</span><input name="accent" value="<%= profile.appearance?.accent || '' %>" pattern="#[0-9a-fA-F]{6}" maxlength="7" placeholder="#df0030"></label>
+<label>QR color<select name="qr_ink"><option value="black">Black on white</option><option value="petrol" <%= profile.qr_ink === 'petrol' ? 'selected' : '' %>>Petrol on white</option></select></label>
+</div><p class="hint">Colors that would reduce readability are automatically darkened. The QR code keeps its contrast and scanning margin.</p></fieldset>
+<button type="submit" class="button"><%= row ? 'Save draft' : 'Create draft' %></button></form>
 <% if (row) { %>
-<section class="panel"><h2>Foto</h2><% if (profile.photo) { %><img class="photo-preview" src="/admin/profiles/<%= row.id %>/photo" alt="Foto attuale nella bozza" width="100" height="120"><% } %><form action="/admin/profiles/<%= row.id %>/photo" method="post" enctype="multipart/form-data" id="photo-form" class="stack" data-csrf="<%= csrf %>"><input type="hidden" name="version" value="<%= row.version %>"><label>Foto PNG, JPEG o WebP<input type="file" name="photo" accept="image/png,image/jpeg,image/webp" required></label><p class="hint">Massimo 2 MB e 16 megapixel. La foto viene ricodificata e i metadati rimossi. Salva prima le altre modifiche.</p><button class="button secondary" type="submit">Carica foto nella bozza</button><p role="status" id="photo-status"></p></form></section>
+<section class="panel"><h2>Photo</h2><% if (profile.photo) { %><img class="photo-preview" src="/admin/profiles/<%= row.id %>/photo" alt="Current draft photo" width="100" height="120"><% } %><form action="/admin/profiles/<%= row.id %>/photo" method="post" enctype="multipart/form-data" id="photo-form" class="stack" data-csrf="<%= csrf %>"><input type="hidden" name="version" value="<%= row.version %>"><label>PNG, JPEG or WebP photo<input type="file" name="photo" accept="image/png,image/jpeg,image/webp" required></label><p class="hint">Maximum 2 MB and 16 megapixels. The photo is re-encoded and metadata is removed. Save other changes first.</p><button class="button secondary" type="submit">Upload photo to draft</button><p role="status" id="photo-status"></p></form></section>
 <% } %>
 <%- include('partials/foot') %>
